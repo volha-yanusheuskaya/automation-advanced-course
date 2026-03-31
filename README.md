@@ -185,6 +185,13 @@ screenshot.path=./screenshots/
 
 ---
 
+## Parallel Execution
+- Configured for 2 parallel threads (safe for CI environments)
+- Each test gets isolated WebDriver via ThreadLocal
+- Increase for local runs: `mvn test -DthreadCount=4`
+
+---
+
 ## Technologies
 
 - Java 21

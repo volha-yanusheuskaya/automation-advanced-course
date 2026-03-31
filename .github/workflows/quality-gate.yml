@@ -34,8 +34,8 @@ jobs:
           username=${{ secrets.REPORTPORTAL_USERNAME }}
           password=${{ secrets.REPORTPORTAL_PASSWORD }}
           screenshot.path=./screenshots/
-          implicit.wait=10
-          page.load.timeout=30
+          dashboard.project=${{ secrets.RP_DEFAULT_PROJECT }}
+          demo.project=${{ secrets.RP_DEMO_PROJECT }}
           EOF
           
           cat > src/test/resources/reportportal.properties << EOF
@@ -45,6 +45,28 @@ jobs:
           rp.project=${{ secrets.REPORTPORTAL_PROJECT }}
           rp.enable=true
           EOF
+
+      - name: Validate Configuration
+        run: |
+          if [ ! -f src/test/resources/config.properties ]; then
+            echo "❌ config.properties not created"
+            exit 1
+          fi
+          
+          if [ ! -f src/test/resources/reportportal.properties ]; then
+            echo "❌ reportportal.properties not created"
+            exit 1
+          fi
+          
+          echo "✅ config.properties created successfully"
+          echo "✅ reportportal.properties created successfully"
+          echo ""
+          echo "Configuration files content:"
+          echo "--- config.properties ---"
+          cat src/test/resources/config.properties
+          echo ""
+          echo "--- reportportal.properties ---"
+          cat src/test/resources/reportportal.properties    
 
       - name: Cache Maven packages
         uses: actions/cache@v4
