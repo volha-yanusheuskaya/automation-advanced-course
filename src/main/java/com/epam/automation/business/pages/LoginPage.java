@@ -1,14 +1,13 @@
 package com.epam.automation.business.pages;
 
 import com.epam.automation.core.base.BasePage;
-import com.epam.automation.core.config.ConfigurationReader;
 import com.epam.automation.core.logger.ILogger;
 import com.epam.automation.core.logger.LoggerFactory;
-import org.openqa.selenium.WebDriver;
+import com.epam.automation.core.utils.WaitUtil;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import static com.epam.automation.business.pages.DashboardPage.DEFAULT_DASHBOARD_URL;
 import static com.epam.automation.core.utils.ElementUtil.click;
 import static com.epam.automation.core.utils.ElementUtil.sendText;
 
@@ -24,37 +23,34 @@ public class LoginPage extends BasePage {
     @FindBy(css = "button[type=submit]")
     private WebElement loginButton;
 
-    public LoginPage(WebDriver driver) {
-        super(driver);
+    public LoginPage() {
+        super();
     }
 
-    private void enterUserName() {
+    private LoginPage enterUserName(String userName) {
         logger.logStep("Entering username");
-        sendText(userNameField, ConfigurationReader.getUsername());
+        sendText(userNameField, userName);
+        return new LoginPage();
     }
 
-    private void enterPassword() {
+    private void enterPassword(String password) {
         logger.logStep("Entering password");
-        sendText(passwordField, ConfigurationReader.getPassword());
+        sendText(passwordField, password);
     }
 
-    private void clickLoginButton() {
+    public void clickLoginButton() {
         logger.logStep("Clicking login button");
         click(loginButton);
     }
 
-    private void waitForLoginSuccess() {
-        logger.logStep("Waiting for login to complete");
-        wait.until(ExpectedConditions.not(
-            ExpectedConditions.urlContains("#login")
-        ));
-        logger.info("Login successful - page navigated from login");
+    public void waitForLoginSuccess() {
+        logger.logStep("Waiting for navigation away from login page");
+        WaitUtil.waitForUrlContains(DEFAULT_DASHBOARD_URL);
+        logger.info("Navigated away from login page");
     }
 
-    public void login() {
-        enterUserName();
-        enterPassword();
-        clickLoginButton();
-        waitForLoginSuccess();
+    public void enterCredentials(String username, String password) {
+        enterUserName(username)
+                .enterPassword(password);
     }
 }

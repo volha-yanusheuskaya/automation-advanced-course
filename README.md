@@ -114,10 +114,10 @@ Logger - Apache Log4j2
 - ReportPortal integration
 
 Reporter - ReportPortal
-- Test execution tracking
-- Screenshot capture on success/failure
-- Step-level reporting
-- Asynchronous logging
+- Test execution tracking via TestNG integration
+- Automatic screenshot capture on test success/failure
+- Log aggregation with Log4j2 integration
+- Asynchronous logging support
 
 Test Runner - TestNG
 - Parallel execution (2 threads)
@@ -132,7 +132,6 @@ Configuration
 
 Utilities
 - Element operations with waits
-- Random data generation
 - Screenshot capture
 - Wait management
 - Sensitive data masking
@@ -176,10 +175,10 @@ public class MyTest extends BaseTest {
 
 Edit src/test/resources/config.properties
 ```properties
-browser=chrome              # chrome, firefox, safari
-headless=false             # false = visible browser window, true = hidden browser
-url=http://your-app-url    # Application URL
-username=test_user         # Test credentials
+browser=chrome                         # chrome, firefox, edge, safari
+headless=false                         # false = visible browser window, true = hidden browser
+url=http://localhost:8080/ui/#login    # ReportPortal login page (local Docker)
+username=test_user                     # Test credentials
 password=test_password
 screenshot.path=./screenshots/
 ```

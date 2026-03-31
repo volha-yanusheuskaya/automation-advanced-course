@@ -7,21 +7,31 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.time.Duration;
 
+import static com.epam.automation.core.config.ConfigurationReader.*;
+
 public class DriverFactory {
     private static final ILogger logger = LoggerFactory.getLogger(DriverFactory.class);
-    private static final String browser = ConfigurationReader.getProperty("browser");
-    private static final BrowserType browserType = BrowserType.valueOf(browser.toUpperCase());
-    private static final boolean headlessMode = Boolean.parseBoolean(ConfigurationReader.getProperty("headless"));
 
     public static WebDriver createDriver() {
-        WebDriver driver;
+        String browser = ConfigurationReader.getProperty("browser");
+        BrowserType browserType = BrowserType.valueOf(browser.toUpperCase());
+        boolean headlessMode = Boolean.parseBoolean(ConfigurationReader.getProperty("headless"));
 
+        WebDriver driver = initializeBrowser(browserType, headlessMode);
+        configureDriver(driver);
+        return driver;
+    }
+
+    private static WebDriver initializeBrowser(BrowserType browserType, boolean headlessMode) {
+        WebDriver driver;
         switch (browserType) {
             case CHROME:
                 WebDriverManager.chromedriver().setup();
@@ -45,6 +55,16 @@ public class DriverFactory {
                 logger.info("Firefox driver initialized");
                 break;
 
+            case EDGE:
+                WebDriverManager.edgedriver().setup();
+                EdgeOptions edgeOptions = new EdgeOptions();
+                if (headlessMode) {
+                    edgeOptions.addArguments("--headless=new");
+                }
+                driver = new EdgeDriver(edgeOptions);
+                logger.info("Edge driver initialized");
+                break;
+
             case SAFARI:
                 driver = new SafariDriver();
                 logger.info("Safari driver initialized");
@@ -53,11 +73,16 @@ public class DriverFactory {
             default:
                 throw new IllegalArgumentException("Browser type not supported");
         }
-
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
-        driver.manage().window().maximize();
-
         return driver;
+    }
+
+    private static void configureDriver(WebDriver driver) {
+        int implicitWait = getImplicitWait();
+        int pageLoadTimeout = getPageLoadTimeout();
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTimeout));
+        driver.manage().window().maximize();
+        logger.info("Driver configured with timeouts: implicit={}, pageLoad={}", implicitWait, pageLoadTimeout);
     }
 }

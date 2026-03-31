@@ -1,7 +1,6 @@
 package com.epam.automation.business.components;
 
 import com.epam.automation.core.base.BasePage;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,8 +15,8 @@ public class ToastComponent extends BasePage {
     @FindBy(css = "div.notification-item h2")
     private WebElement toastText;
 
-    public ToastComponent(WebDriver driver) {
-        super(driver);
+    public ToastComponent() {
+        super();
     }
 
     public boolean isToastComponentDisplayed() {

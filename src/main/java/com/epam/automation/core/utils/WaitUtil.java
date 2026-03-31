@@ -1,18 +1,18 @@
 package com.epam.automation.core.utils;
 
-import com.epam.automation.core.driver.DriverSingleton;
+import com.epam.automation.core.driver.DriverManager;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static com.epam.automation.core.config.ConfigurationReader.getDefaultTimeout;
+
 public class WaitUtil {
 
-    private static final int DEFAULT_TIMEOUT = 30;
-
     public static WebDriverWait getWait() {
-        return new WebDriverWait(DriverSingleton.getInstance().getDriver(), Duration.ofSeconds(DEFAULT_TIMEOUT));
+        return new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(getDefaultTimeout()));
     }
 
     public static void waitForElementVisible(WebElement element) {
@@ -21,5 +21,9 @@ public class WaitUtil {
 
     public static void waitForElementClickable(WebElement element) {
         getWait().until(ExpectedConditions.elementToBeClickable(element));
+    }
+
+    public static void waitForUrlContains(String urlFragment) {
+        getWait().until(ExpectedConditions.urlContains(urlFragment));
     }
 }

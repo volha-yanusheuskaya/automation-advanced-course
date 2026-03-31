@@ -10,48 +10,30 @@ public class ElementUtil {
     private static final ILogger logger = LoggerFactory.getLogger(ElementUtil.class);
 
     public static void sendText(WebElement element, String text) {
-        try {
-            waitForElementVisible(element);
-            element.clear();
-            element.sendKeys(text);
+        waitForElementVisible(element);
+        element.clear();
+        element.sendKeys(text);
 
-            String logMessage = isSensitivePasswordField(element) ? "***MASKED***" : text;
-            logger.info("Text sent to element: {}", logMessage);
-        } catch (Exception e) {
-            logger.error("Failed to send text to element", e);
-        }
+        String logMessage = isSensitivePasswordField(element) ? "***MASKED***" : text;
+        logger.info("Text sent to element: {}", logMessage);
     }
 
     public static void click(WebElement element) {
-        try {
-            waitForElementClickable(element);
-            element.click();
-            logger.info("Element clicked successfully");
-        } catch (Exception e) {
-            logger.error("Failed to click element", e);
-        }
+        waitForElementClickable(element);
+        element.click();
+        logger.info("Element clicked successfully");
     }
 
     public static String getText(WebElement element) {
-        try {
-            waitForElementVisible(element);
-            String text = element.getText();
-            logger.info("Text retrieved: {}", text);
-            return text;
-        } catch (Exception e) {
-            logger.error("Failed to get text from element", e);
-            return "";
-        }
+        waitForElementVisible(element);
+        String text = element.getText();
+        logger.info("Text retrieved: {}", text);
+        return text;
     }
 
     public static boolean isDisplayed(WebElement element) {
-        try {
-            waitForElementVisible(element);
-            return element.isDisplayed();
-        } catch (Exception e) {
-            logger.warn("Element not displayed");
-            return false;
-        }
+        waitForElementVisible(element);
+        return element.isDisplayed();
     }
 
     private static boolean isSensitivePasswordField(WebElement element) {
