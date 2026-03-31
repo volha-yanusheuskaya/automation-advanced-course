@@ -1,0 +1,100 @@
+name: Quality Gate - Build & Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        java-version: [ '21' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Create Configuration
+        run: |
+          cat > src/test/resources/config.properties << EOF
+          browser=chrome
+          headless=true
+          url=${{ secrets.REPORTPORTAL_URL }}
+          username=${{ secrets.REPORTPORTAL_USERNAME }}
+          password=${{ secrets.REPORTPORTAL_PASSWORD }}
+          screenshot.path=./screenshots/
+          dashboard.project=${{ secrets.RP_DEFAULT_PROJECT }}
+          demo.project=${{ secrets.RP_DEMO_PROJECT }}
+          EOF
+          
+          cat > src/test/resources/reportportal.properties << EOF
+          rp.endpoint=${{ secrets.REPORTPORTAL_ENDPOINT }}
+          rp.uuid=${{ secrets.REPORTPORTAL_UUID }}
+          rp.launch=AutomationTests-GitHub-${{ github.run_number }}
+          rp.project=${{ secrets.REPORTPORTAL_PROJECT }}
+          rp.enable=true
+          EOF
+
+      - name: Validate Configuration
+        run: |
+          if [ ! -f src/test/resources/config.properties ]; then
+            echo "❌ config.properties not created"
+            exit 1
+          fi
+          
+          if [ ! -f src/test/resources/reportportal.properties ]; then
+            echo "❌ reportportal.properties not created"
+            exit 1
+          fi
+          
+          echo "✅ config.properties created successfully"
+          echo "✅ reportportal.properties created successfully"
+          echo ""
+          echo "Configuration files content:"
+          echo "--- config.properties ---"
+          cat src/test/resources/config.properties
+          echo ""
+          echo "--- reportportal.properties ---"
+          cat src/test/resources/reportportal.properties    
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-    
+
+      - name: Build with Maven
+        run: mvn clean compile
+
+      - name: Run Tests
+        run: mvn test
+        continue-on-error: false
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{ github.run_number }}
+          path: |
+            logs/
+            screenshots/

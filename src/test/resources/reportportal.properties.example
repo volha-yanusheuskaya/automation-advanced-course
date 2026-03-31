@@ -1,0 +1,31 @@
+# Report Portal Configuration
+rp.endpoint=https://rp.epam.com
+rp.uuid=YOUR_UUID_HERE
+rp.launch=YOUR_LAUNCH_NAME_HERE
+rp.project=YOUR_PROJECT_NAME_HERE
+
+# Report Portal Settings
+rp.enable=true
+rp.description=YOUR_LAUNCH_DESCRIPTION_HERE
+rp.reporting.async=true
+rp.reporting.callback=false
+
+# Launch Mode: DEFAULT, DEBUG
+rp.mode=DEFAULT
+
+# Rerun configuration
+rp.rerun=false
+rp.rerun.of=LAUNCH_UUID_TO_RERUN
+
+# Step reporting
+rp.is.generate.unique.id=true
+rp.convertimage=true
+
+# Skipped issue
+rp.skipped.issue=true
+
+# Batch logs
+rp.batch.size.logs=20
+
+# HTTP client configuration
+rp.http.timeout=60
