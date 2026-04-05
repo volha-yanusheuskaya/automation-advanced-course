@@ -1,63 +1,115 @@
 package com.epam.automation.tests.data;
 
 import com.epam.automation.business.models.Launch;
-import com.epam.automation.business.builder.LaunchBuilder;
-
-import java.util.ArrayList;
+import com.epam.automation.core.data_reader.JsonDataReader;
 import java.util.List;
 
 public class LaunchTestData {
+    private static final String JSON_FILE_PATH = "src/test/resources/test_data/launches.json";
+    private static final JsonDataReader reader = new JsonDataReader();
 
-    private static final Object[][] BASE_LAUNCH_DATA = {
-            {"Demo Api Tests #1", "2026-03-31 16:46:51", 10, 1, 9, 0, 0, 1, 10, 2},
-            {"Demo Api Tests #2", "2026-03-31 16:46:54", 15, 5, 9, 1, 1, 5, 6, 4},
-            {"Demo Api Tests #3", "2026-03-31 16:46:57", 20, 10, 8, 2, 4, 4, 1, 7},
-            {"Demo Api Tests #4", "2026-03-31 16:47:00", 25, 20, 5, 0, 4, 1, 0, 1},
-            {"Demo Api Tests #5", "2026-03-31 16:47:04", 30, 30, 0, 0, 0, 0, 0, 0},
-    };
-
-    public static String[][] getLaunchesSortedByMostRecent() {
-        return reverseOrder(toStringArray(BASE_LAUNCH_DATA));
+    public static String[][] getFirstLaunchByName() {
+        return getLaunchByNameFromKey("launches1");
     }
 
-    public static String[][] getLaunchesSortedByName() {
-        return toStringArray(BASE_LAUNCH_DATA.clone());
+    public static String[][] getSecondLaunchByName() {
+        return getLaunchByNameFromKey("launches2");
     }
 
-    public static List<Launch> getLaunches() {
-        List<Launch> launches = new ArrayList<>();
-        for (Object[] data : BASE_LAUNCH_DATA) {
-            Launch launch = new LaunchBuilder()
-                    .name((String) data[0])
-                    .date((String) data[1])
-                    .totalSteps((int) data[2])
-                    .passedSteps((int) data[3])
-                    .failedSteps((int) data[4])
-                    .skippedSteps((int) data[5])
-                    .productBugCount((int) data[6])
-                    .autoBugCount((int) data[7])
-                    .systemIssueCount((int) data[8])
-                    .toInvestigateCount((int) data[9])
-                    .build();
-            launches.add(launch);
-        }
-        return launches;
+    public static String[][] getThirdLaunchByName() {
+        return getLaunchByNameFromKey("launches3");
     }
 
-    private static String[][] toStringArray(Object[][] data) {
-        String[][] result = new String[data.length][2];
-        for (int i = 0; i < data.length; i++) {
-            result[i][0] = (String) data[i][0];
-            result[i][1] = (String) data[i][1];
+    public static String[][] getFourthLaunchByName() {
+        return getLaunchByNameFromKey("launches4");
+    }
+
+    public static String[][] getFifthLaunchByName() {
+        return getLaunchByNameFromKey("launches5");
+    }
+
+    public static String[][] getFirstSortedLaunchByMostRecent() {
+        return getLaunchByNameFromKey("sortedByMostRecent1");
+    }
+
+    public static String[][] getSecondSortedLaunchByMostRecent() {
+        return getLaunchByNameFromKey("sortedByMostRecent2");
+    }
+
+    public static String[][] getThirdSortedLaunchByMostRecent() {
+        return getLaunchByNameFromKey("sortedByMostRecent3");
+    }
+
+    public static String[][] getFourthSortedLaunchByMostRecent() {
+        return getLaunchByNameFromKey("sortedByMostRecent4");
+    }
+
+    public static String[][] getFifthSortedLaunchByMostRecent() {
+        return getLaunchByNameFromKey("sortedByMostRecent5");
+    }
+
+    public static Launch getFirstLaunch() {
+        return getLaunchFromKey("launches1");
+    }
+
+    public static Launch getSecondLaunch() {
+        return getLaunchFromKey("launches2");
+    }
+
+    public static Launch getThirdLaunch() {
+        return getLaunchFromKey("launches3");
+    }
+
+    public static Launch getFourthLaunch() {
+        return getLaunchFromKey("launches4");
+    }
+
+    public static Launch getFifthLaunch() {
+        return getLaunchFromKey("launches5");
+    }
+
+    /**
+     * Retrieves launch data as a 2D string array from the JSON file.
+     *
+     * @param key the JSON key to retrieve data for
+     * @return a 2D string array containing launch information
+     */
+    private static String[][] getLaunchByNameFromKey(String key) {
+        return convertToStringArray(reader.readDataByKey(JSON_FILE_PATH, key));
+    }
+
+    /**
+     * Retrieves the first launch object from the JSON file for a given key.
+     *
+     * @param key the JSON key to retrieve data for
+     * @return the first Launch object, or null if no launches found
+     */
+    private static Launch getLaunchFromKey(String key) {
+        List<Launch> launches = reader.readDataByKey(JSON_FILE_PATH, key);
+        return launches.getFirst();
+    }
+
+    /**
+     * Converts a list of Launch objects into a 2D string array.
+     *
+     * @param launches the list of Launch objects to convert
+     * @return a 2D string array with launch details
+     */
+    private static String[][] convertToStringArray(List<Launch> launches) {
+        String[][] result = new String[launches.size()][10];
+        for (int i = 0; i < launches.size(); i++) {
+            Launch l = launches.get(i);
+            result[i][0] = l.getName();
+            result[i][1] = l.getDate();
+            result[i][2] = String.valueOf(l.getTotalSteps());
+            result[i][3] = String.valueOf(l.getPassedSteps());
+            result[i][4] = String.valueOf(l.getFailedSteps());
+            result[i][5] = String.valueOf(l.getSkippedSteps());
+            result[i][6] = String.valueOf(l.getProductBugCount());
+            result[i][7] = String.valueOf(l.getAutoBugCount());
+            result[i][8] = String.valueOf(l.getSystemIssueCount());
+            result[i][9] = String.valueOf(l.getToInvestigateCount());
         }
         return result;
-    }
-
-    private static String[][] reverseOrder(String[][] data) {
-        String[][] reversed = new String[data.length][2];
-        for (int i = 0; i < data.length; i++) {
-            reversed[i] = data[data.length - 1 - i];
-        }
-        return reversed;
     }
 }

@@ -2,6 +2,7 @@ package com.epam.automation.core.utils;
 
 import com.epam.automation.core.driver.DriverManager;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -27,7 +28,10 @@ public class WaitUtil {
         getWait().until(ExpectedConditions.urlContains(urlFragment));
     }
 
-    public static void waitForElementContainsText(WebElement element, String expectedText) {
-        getWait().until(ExpectedConditions.textToBePresentInElement(element, expectedText));
+    public static void waitForElementTextToChange(WebElement element, String oldText) {
+        getWait().until((ExpectedCondition<Boolean>) driver -> {
+            String currentText = element.getText();
+            return !currentText.equals(oldText);
+        });
     }
 }

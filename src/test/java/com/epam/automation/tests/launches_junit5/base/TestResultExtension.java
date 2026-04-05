@@ -1,4 +1,4 @@
-package com.epam.automation.tests.junit5.base;
+package com.epam.automation.tests.launches_junit5.base;
 
 import com.epam.automation.core.logger.ILogger;
 import com.epam.automation.core.logger.LoggerFactory;

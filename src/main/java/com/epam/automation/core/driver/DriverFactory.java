@@ -39,7 +39,7 @@ public class DriverFactory {
                 chromeOptions.addArguments("--remote-allow-origins=*");
                 if (headlessMode) {
                     chromeOptions.addArguments("--headless=new");
-                    chromeOptions.addArguments("--window-size=1920,1080");
+                    chromeOptions.addArguments("--window-size=1920,1200");
                 } else {
                     chromeOptions.addArguments("--start-maximized");
                 }

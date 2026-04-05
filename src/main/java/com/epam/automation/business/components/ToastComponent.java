@@ -4,8 +4,7 @@ import com.epam.automation.core.base.BasePage;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static com.epam.automation.core.utils.ElementUtil.getText;
-import static com.epam.automation.core.utils.ElementUtil.isDisplayed;
+import static com.epam.automation.core.utils.ElementUtil.*;
 
 public class ToastComponent extends BasePage {
 
@@ -14,6 +13,9 @@ public class ToastComponent extends BasePage {
 
     @FindBy(css = "div.notification-item h2")
     private WebElement toastText;
+
+    @FindBy(css = "div.notification-item button")
+    private WebElement toastCloseButton;
 
     public ToastComponent() {
         super();
@@ -25,6 +27,10 @@ public class ToastComponent extends BasePage {
 
     public String getToastMessage() {
         return getText(toastText);
+    }
+
+    public void clickCloseToast() {
+        click(toastCloseButton);
     }
 
 }

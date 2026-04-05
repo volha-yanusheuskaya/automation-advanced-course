@@ -1,11 +1,10 @@
-package com.epam.automation.tests.junit5;
+package com.epam.automation.tests.launches_junit5;
 
 import com.epam.automation.business.components.ToastComponent;
 import com.epam.automation.business.pages.DashboardPage;
-import com.epam.automation.tests.junit5.base.BaseTest;
+import com.epam.automation.tests.launches_junit5.base.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;

@@ -1,17 +1,38 @@
 package com.epam.automation.business.models;
 
+/**
+ * Data model representing a test launch in Report Portal.
+ * <p>
+ * Contains information about a test launch including name, execution date,
+ * and test statistics (passed, failed, skipped, defect counts).
+ */
 public class Launch {
     private String name;
-    private String date;
-    private int totalSteps;
-    private int passedSteps;
-    private int failedSteps;
-    private int skippedSteps;
-    private int productBugCount;
-    private int autoBugCount;
-    private int systemIssueCount;
-    private int toInvestigateCount;
+    private final String date;
+    private final int totalSteps;
+    private final int passedSteps;
+    private final int failedSteps;
+    private final int skippedSteps;
+    private final int productBugCount;
+    private final int autoBugCount;
+    private final int systemIssueCount;
+    private final int toInvestigateCount;
 
+    /**
+     * Constructs a Launch object with complete test statistics.
+     *
+     * @param name               the launch name (e.g., "Demo Api Tests #1")
+     * @param date               the launch date in format "yyyy-MM-dd HH:mm:ss"
+     * @param totalSteps         total number of test steps in the launch
+     * @param passedSteps        number of passed steps
+     * @param failedSteps        number of failed steps
+     * @param skippedSteps       number of skipped steps
+     * @param productBugCount    number of issues marked as Product Bugs
+     * @param autoBugCount       number of issues marked as Automation Bugs
+     * @param systemIssueCount   number of issues marked as System Issues
+     * @param toInvestigateCount number of issues marked as To Investigate
+     * @throws IllegalArgumentException if negative counts are provided
+     */
     public Launch(String name, String date, int totalSteps, int passedSteps, int failedSteps,
                   int skippedSteps, int productBugCount, int autoBugCount,
                   int systemIssueCount, int toInvestigateCount) {
@@ -27,95 +48,102 @@ public class Launch {
         this.toInvestigateCount = toInvestigateCount;
     }
 
+    /**
+     * Gets the launch name.
+     *
+     * @return the launch name (e.g., "Demo Api Tests #1")
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the launch name.
+     *
+     * @param name the new launch name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the launch execution date.
+     *
+     * @return the date in format "yyyy-MM-dd HH:mm:ss"
+     */
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
+    /**
+     * Gets the total number of test steps in the launch.
+     *
+     * @return total steps count (should equal sum of passed, failed, and skipped)
+     */
     public int getTotalSteps() {
         return totalSteps;
     }
 
-    public void setTotalSteps(int totalSteps) {
-        this.totalSteps = totalSteps;
-    }
-
+    /**
+     * Gets the number of passed steps.
+     *
+     * @return count of passed steps
+     */
     public int getPassedSteps() {
         return passedSteps;
     }
 
-    public void setPassedSteps(int passedSteps) {
-        this.passedSteps = passedSteps;
-    }
-
+    /**
+     * Gets the number of failed steps.
+     *
+     * @return count of failed steps
+     */
     public int getFailedSteps() {
         return failedSteps;
     }
 
-    public void setFailedSteps(int failedSteps) {
-        this.failedSteps = failedSteps;
-    }
-
+    /**
+     * Gets the number of skipped steps.
+     *
+     * @return count of skipped steps
+     */
     public int getSkippedSteps() {
         return skippedSteps;
     }
 
-    public void setSkippedSteps(int skippedSteps) {
-        this.skippedSteps = skippedSteps;
-    }
-
+    /**
+     * Gets the number of defects marked as Product Bugs.
+     *
+     * @return count of product bug defects
+     */
     public int getProductBugCount() {
         return productBugCount;
     }
 
-    public void setProductBugCount(int productBugCount) {
-        this.productBugCount = productBugCount;
-    }
-
+    /**
+     * Gets the number of defects marked as Automation Bugs.
+     *
+     * @return count of automation bug defects
+     */
     public int getAutoBugCount() {
         return autoBugCount;
     }
 
-    public void setAutoBugCount(int autoBugCount) {
-        this.autoBugCount = autoBugCount;
-    }
-
+    /**
+     * Gets the number of defects marked as System Issues.
+     *
+     * @return count of system issue defects
+     */
     public int getSystemIssueCount() {
         return systemIssueCount;
     }
 
-    public void setSystemIssueCount(int systemIssueCount) {
-        this.systemIssueCount = systemIssueCount;
-    }
-
+    /**
+     * Gets the number of defects marked as To Investigate.
+     *
+     * @return count of defects requiring investigation
+     */
     public int getToInvestigateCount() {
         return toInvestigateCount;
-    }
-
-    public void setToInvestigateCount(int toInvestigateCount) {
-        this.toInvestigateCount = toInvestigateCount;
-    }
-
-    @Override
-    public String toString() {
-        return "Launch{" +
-                "name='" + name + '\'' +
-                ", date='" + date + '\'' +
-                ", totalTests=" + totalSteps +
-                ", passedTests=" + passedSteps +
-                ", failedTests=" + failedSteps +
-                ", skippedTests=" + skippedSteps +
-                '}';
     }
 }

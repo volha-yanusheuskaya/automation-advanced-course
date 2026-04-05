@@ -4,6 +4,7 @@ import com.epam.automation.business.models.Launch;
 import com.epam.automation.core.base.BasePage;
 import com.epam.automation.core.config.ConfigurationReader;
 import com.epam.automation.core.utils.WaitUtil;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -12,11 +13,27 @@ import java.util.List;
 
 import static com.epam.automation.core.utils.ElementUtil.click;
 
+/**
+ * Page Object representing the Launches page in Report Portal.
+ * <p>
+ * Encapsulates interaction with the launches list view, providing methods
+ * for navigation, sorting, and data extraction. Uses Page Object Model pattern
+ * with Selenium WebDriver for element interaction.
+ *
+ * <p>Key functionality:
+ * <ul>
+ *   <li>Navigate to launches page</li>
+ *   <li>Extract launch data (names, dates, test counts, defect counts)</li>
+ *   <li>Click column headers to sort launches</li>
+ *   <li>Verify launches list is displayed</li>
+ * </ul>
+ */
 public class LaunchesPage extends BasePage {
 
     private static final String baseURL = ConfigurationReader.getBaseUrl();
     private static final String DEMO_PROJECT = ConfigurationReader.getProperty("demo.project");
     private static final String LAUNCHES_PAGE_URL = baseURL + "/ui/#" + DEMO_PROJECT + "/launches/all";
+    private static final String LAUNCH_SELECTION_ELEMENT_PATTERN = "//div[contains(@class,'grid-row-wrapper')][%d]//div[contains(@class,'checkIcon')]";
 
     @FindBy(xpath = "//div[contains(@class,'allLatestDropdown__selected-value')]/div[contains(@class,'active')]")
     private WebElement allLaunchesTitle;
@@ -27,11 +44,11 @@ public class LaunchesPage extends BasePage {
     @FindBy(xpath = "//td//span[contains(@class,'itemInfo__number')]")
     private List<WebElement> launchNumber;
 
-    @FindBy(xpath = "//span[contains(@class,'title-full') and text()='name']")
-    private WebElement nameColumnHeader;
-
     @FindBy(xpath = "//div[contains(@class,'grid-row-wrapper')]")
     private List<WebElement> totalLaunches;
+
+    @FindBy(xpath = "//span[contains(@class,'title-full') and text()='name']")
+    private WebElement nameColumnHeader;
 
     @FindBy(xpath = "//span[contains(@class,'absolute-time')]")
     private List<WebElement> startTimeValue;
@@ -60,10 +77,29 @@ public class LaunchesPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'ti-col')]")
     private List<WebElement> toInvestigateCount;
 
+    @FindBy(xpath = "//div[contains(@class,'selectedItems__item')]")
+    private List<WebElement> selectedLaunches;
+
+    @FindBy(xpath = "//div[contains(@class,'actionPanel')]//i[contains(@class,'toggle-icon')]")
+    private WebElement actionsButton;
+
+    @FindBy(xpath = "//div[contains(@class,'actionPanel')]//span[text()='Compare']")
+    private WebElement compareButton;
+
+    @FindBy(xpath = "//div[contains(@class,'launch-compare-modal')]")
+    private WebElement compareLaunchesModalWindow;
+
     public LaunchesPage() {
         super();
     }
 
+    /**
+     * Redirects to the launches page in Report Portal.
+     *
+     * <p>Waits for the "All Launches" title to be visible before returning.
+     *
+     * @see WaitUtil#waitForElementVisible(WebElement)
+     */
     public void redirectToLaunchesPage() {
         driver.get(LAUNCHES_PAGE_URL);
         WaitUtil.waitForElementVisible(allLaunchesTitle);
@@ -77,6 +113,13 @@ public class LaunchesPage extends BasePage {
         return launchNumber;
     }
 
+    /**
+     * Gets a list of all launch names with their corresponding numbers.
+     *
+     * <p>Example: ["Demo Api Tests #1", "Demo Api Tests #2"]
+     *
+     * @return list of formatted launch names with numbers, or empty list if no launches
+     */
     public List<String> getAllLaunchesNames() {
         List<String> allLaunchesNames = new ArrayList<>();
         for (int i = 0; i < getLaunchesCount(); i++) {
@@ -88,6 +131,11 @@ public class LaunchesPage extends BasePage {
         return allLaunchesNames;
     }
 
+    /**
+     * Checks if the total launches container is empty.
+     *
+     * @return true if no launches are present, false otherwise
+     */
     public boolean totalLaunchesEmpty() {
         return totalLaunches.isEmpty();
     }
@@ -96,6 +144,11 @@ public class LaunchesPage extends BasePage {
         return !totalLaunches.isEmpty();
     }
 
+    /**
+     * Checks if launches list is displayed on the page.
+     *
+     * @return true if launches container is visible with content, false otherwise
+     */
     public boolean isLaunchesListDisplayed() {
         return totalLaunches != null && totalLaunchesNotEmpty();
     }
@@ -104,10 +157,20 @@ public class LaunchesPage extends BasePage {
         return totalLaunches;
     }
 
+    /**
+     * Gets the count of launches displayed on the page.
+     *
+     * @return number of launch rows in the table
+     */
     public int getLaunchesCount() {
         return getTotalLaunches().size();
     }
 
+    /**
+     * Gets all launch start times from the page.
+     *
+     * @return list of start times in format "yyyy-MM-dd HH:mm:ss"
+     */
     public List<String> getAllStartTimes() {
         List<String> times = new ArrayList<>();
         for (WebElement element : startTimeValue) {
@@ -120,10 +183,24 @@ public class LaunchesPage extends BasePage {
         return times;
     }
 
+    /**
+     * Clicks the Name column header to sort launches.
+     *
+     * <p>Toggles between ascending and descending order on repeated clicks.
+     */
     public void clickNameColumnHeaderToSort() {
         click(nameColumnHeader);
     }
 
+    /**
+     * Extracts launch data from the page and converts to Launch objects.
+     *
+     * <p>Parses all visible launches and creates Launch instances with
+     * complete test statistics.
+     *
+     * @return list of {@link Launch} objects with data from the page
+     * @see Launch
+     */
     public List<Launch> getLaunchesCountDataFromPage() {
         List<Launch> launches = new ArrayList<>();
         int launchesCount = getLaunchesCount();
@@ -149,6 +226,12 @@ public class LaunchesPage extends BasePage {
         return launches;
     }
 
+    /**
+     * Safely parses an integer from text, handling null and non-numeric values.
+     *
+     * @param text the text to parse, may be null or empty
+     * @return the parsed integer, or 0 if text is null, empty, or not a valid number
+     */
     private int parseIntSafely(String text) {
         if (text == null || text.trim().isEmpty()) {
             return 0;
@@ -158,5 +241,32 @@ public class LaunchesPage extends BasePage {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    public void selectLaunchByIndex(int index) {
+        String xpath = String.format(LAUNCH_SELECTION_ELEMENT_PATTERN, index);
+        WebElement selectionElement = driver.findElement(By.xpath(xpath));
+        click(selectionElement);
+    }
+
+    public List<String> getSelectedLaunches() {
+        List<String> selectedNames = new ArrayList<>();
+        for (WebElement element : selectedLaunches) {
+            String name = element.getText();
+            selectedNames.add(name.trim());
+        }
+        return selectedNames;
+    }
+
+    public void clickActionsButton() {
+        click(actionsButton);
+    }
+
+    public void clickCompareButton() {
+        click(compareButton);
+    }
+
+    public boolean isCompareLaunchesModalWindowDisplayed() {
+        return compareLaunchesModalWindow.isDisplayed();
     }
 }

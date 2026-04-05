@@ -4,19 +4,25 @@
 
     <test name="Login Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.testng.LoginTest"/>
+            <class name="com.epam.automation.tests.launches_testng.LoginTest"/>
         </classes>
     </test>
 
     <test name="Launches Sorting Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.testng.LaunchesSortingTest"/>
+            <class name="com.epam.automation.tests.launches_testng.LaunchesSortingTest"/>
         </classes>
     </test>
 
     <test name="Launches Count Data Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.testng.LaunchesCountDataTest"/>
+            <class name="com.epam.automation.tests.launches_testng.LaunchesCountDataTest"/>
+        </classes>
+    </test>
+
+    <test name="Launches Comparison Tests" enabled="true">
+        <classes>
+            <class name="com.epam.automation.tests.launches_testng.LaunchesComparisonTest"/>
         </classes>
     </test>
 

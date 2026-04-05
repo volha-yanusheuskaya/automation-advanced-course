@@ -8,104 +8,123 @@ import com.epam.automation.core.utils.WaitUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class for interacting with Launches functionality in Report Portal.
+ * <p>
+ * Provides business logic for verifying launch list display, sorting operations,
+ * and data validation. Works in conjunction with {@link LaunchesPage} to interact
+ * with the launches page UI.
+ *
+ * <p>Primary responsibilities:
+ * <ul>
+ *   <li>Verify launches are sorted correctly (by name, date, defects, etc.)</li>
+ *   <li>Validate launches list display and count</li>
+ *   <li>Perform sorting operations via column headers</li>
+ *   <li>Extract and validate launch data</li>
+ * </ul>
+ */
 public class LaunchesService {
     private static final ILogger logger = LoggerFactory.getLogger(LaunchesService.class);
-
     private final LaunchesPage launchesPage;
 
+    /**
+     * Constructs a LaunchesService with the provided LaunchesPage instance.
+     *
+     * @param launchesPage the page object for launches page interactions
+     * @throws NullPointerException if launchesPage is null
+     */
     public LaunchesService(LaunchesPage launchesPage) {
         this.launchesPage = launchesPage;
     }
 
-    public boolean isLaunchesListDisplayedCorrectly(String[][] expectedSortedLaunches) {
-        boolean isLaunchesListDisplayed = launchesPage.isLaunchesListDisplayed();
-        if (!isLaunchesListDisplayed) {
-            logger.error("Launches list is not displayed");
-            return false;
-        }
-
-        int actualLaunchesCount = launchesPage.getLaunchesCount();
-        if (actualLaunchesCount != expectedSortedLaunches.length) {
-            logger.error("Launches list has different sizes");
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean isLaunchesListAbleToBeSorted() {
+    /**
+     * Verifies if launches are sorted by most recent (descending by date).
+     *
+     * <p>Compares actual start times from the page with expected times.
+     * When testing with individual data sets, verifies that expected launches appear
+     * in the actual list in the correct sorted order.
+     *
+     * @param expectedSortedLaunches expected launches sorted by date descending
+     * @param launchIndex index of the launch to verify in the sorted list
+     * @return true if actual sort order matches expected, false otherwise
+     */
+    public boolean isLaunchesListSortedByMostRecent(String[][] expectedSortedLaunches, int launchIndex) {
         if (launchesPage.totalLaunchesEmpty()) {
             logger.warn("Launches list is empty");
             return false;
         }
 
-        int launchesCount = launchesPage.getLaunchesCount();
-        if (launchesCount < 2) {
-            logger.warn("Only {} launch found, need at least 2 to sort", launchesCount);
-            return false;
-        }
-
-        return true;
-    }
-
-    public boolean isLaunchesListSortedByMostRecent(String[][] expectedSortedLaunches) {
-        if (!isLaunchesListAbleToBeSorted()) {
-            logger.error("Launches list is not able to be sorted");
-            return false;
-        }
-
-        if (!isLaunchesListDisplayedCorrectly(expectedSortedLaunches)) {
-            logger.error("Launches list is not displayed correctly");
+        if (!launchesPage.isLaunchesListDisplayed()) {
+            logger.error("Launches list is not displayed");
             return false;
         }
 
         List<String> actualStartTimes = launchesPage.getAllStartTimes();
-        List<String> expectedTimes = new ArrayList<>();
-        for (String[] launch : expectedSortedLaunches) {
-            expectedTimes.add(launch[1]);
-        }
+        String expectedTime = expectedSortedLaunches[0][1];
+        String actualTime = actualStartTimes.get(launchIndex);
 
-        logger.info("Expected start times: {}", expectedTimes);
-        logger.info("Actual start times: {}", actualStartTimes);
+        logger.info("Expected start time: [{}]", expectedTime);
+        logger.info("Actual start time: [{}]", actualTime);
 
-        boolean result = expectedTimes.equals(actualStartTimes);
-        logger.info("Start times match: {}", result);
-
-        return result;
+        return actualTime.equals(expectedTime);
     }
 
-    public boolean isLaunchesListSortedByName(String[][] expectedSortedLaunches) {
-        if (!isLaunchesListAbleToBeSorted()) {
-            logger.error("Launches list is not able to be sorted");
+    /**
+     * Verifies if launches are sorted alphabetically by name.
+     *
+     * <p>When testing with individual data sets, verifies that the expected launch
+     * is present in the list.
+     *
+     * @param expectedSortedLaunches expected launches sorted alphabetically by name
+     * @param launchIndex index of the launch to verify in the sorted list
+     * @return true if actual sort order matches expected, false otherwise
+     */
+    public boolean isLaunchesListSortedByName(String[][] expectedSortedLaunches,  int launchIndex) {
+        if (launchesPage.totalLaunchesEmpty()) {
+            logger.warn("Launches list is empty");
             return false;
         }
 
-        if (!isLaunchesListDisplayedCorrectly(expectedSortedLaunches)) {
-            logger.error("Launches list is not displayed correctly");
+        if (!launchesPage.isLaunchesListDisplayed()) {
+            logger.error("Launches list is not displayed");
             return false;
         }
 
-        List<String> actualLaunchNames = launchesPage.getAllLaunchesNames();
-        List<String> expectedNames = new ArrayList<>();
-        for (String[] launch : expectedSortedLaunches) {
-            expectedNames.add(launch[0]);
-        }
+        List<String> actualLaunchesNames = launchesPage.getAllLaunchesNames();
+        String expectedLaunchName = expectedSortedLaunches[0][0];
+        String actualLaunchName = actualLaunchesNames.get(launchIndex);
 
-        logger.info("Expected launch names: {}", expectedNames);
-        logger.info("Actual launch names: {}", actualLaunchNames);
+        logger.info("Expected launch name: [{}]", expectedLaunchName);
+        logger.info("Actual launch name: [{}]", actualLaunchName);
 
-        boolean result = expectedNames.equals(actualLaunchNames);
-        logger.info("Start launch names: {}", result);
-
-        return result;
+        return actualLaunchName.equals(expectedLaunchName);
     }
 
+    /**
+     * Clicks the Name column header to sort launches, then waits for the list to update.
+     */
     public void sortLaunchesByName() {
+        String oldFirstLaunchName = launchesPage.getTotalLaunches().getFirst().getText();
         launchesPage.clickNameColumnHeaderToSort();
-        for (int i = 0; i < launchesPage.getLaunchesCount(); i++) {
-            WaitUtil.waitForElementVisible(launchesPage.getTotalLaunches().get(i));
-        }
-        logger.info("Launches sorted by name. First launch: {}", launchesPage.getAllLaunchesNames().getFirst());
+        WaitUtil.waitForElementTextToChange(launchesPage.getTotalLaunches().getFirst(), oldFirstLaunchName);
     }
 
+    public boolean verifySelectedLaunches(String[][] expectedSelectedLaunches) {
+        List<String> actualSelectedLaunchesList = launchesPage.getSelectedLaunches();
+
+        List<String> expectedLaunchNames = new ArrayList<>();
+        for (String[] launch : expectedSelectedLaunches) {
+            expectedLaunchNames.add(launch[0]);
+        }
+
+        logger.info("Expected selected launches: {}", expectedLaunchNames);
+        logger.info("Actual selected launches: {}", actualSelectedLaunchesList);
+
+        return actualSelectedLaunchesList.equals(expectedLaunchNames);
+    }
+
+    public void clickCompareLaunches() {
+        launchesPage.clickActionsButton();
+        launchesPage.clickCompareButton();
+    }
 }

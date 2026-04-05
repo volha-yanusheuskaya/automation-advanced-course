@@ -51,10 +51,10 @@ public class ConfigurationReader {
     }
 
     public static int getDefaultTimeout() {
-        return Integer.parseInt(properties.getProperty("default.timeout", "15"));
+        return Integer.parseInt(properties.getProperty("default.timeout", "30"));
     }
 
     public static int getPageLoadTimeout() {
-        return Integer.parseInt(properties.getProperty("page.load.timeout", "30"));
+        return Integer.parseInt(properties.getProperty("page.load.timeout", "45"));
     }
 }

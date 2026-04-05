@@ -1,7 +1,7 @@
-package com.epam.automation.tests.testng;
+package com.epam.automation.tests.launches_testng;
 
 import com.epam.automation.business.components.ToastComponent;
-import com.epam.automation.tests.testng.base.BaseTest;
+import com.epam.automation.tests.launches_testng.base.BaseTest;
 import com.epam.automation.business.pages.DashboardPage;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -24,7 +24,7 @@ public class LoginTest extends BaseTest {
         softAssert.assertAll();
     }
 
-    @Test(priority = 2, description = "Verify displaying of the Dashboard page after login")
+    @Test(priority = 1, description = "Verify displaying of the Dashboard page after login")
     public void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
 
