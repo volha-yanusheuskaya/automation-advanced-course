@@ -26,7 +26,7 @@ public class DriverFactory {
         boolean headlessMode = Boolean.parseBoolean(ConfigurationReader.getProperty("headless"));
 
         WebDriver driver = initializeBrowser(browserType, headlessMode);
-        configureDriver(driver);
+        configureDriver(driver, headlessMode);
         return driver;
     }
 
@@ -37,9 +37,11 @@ public class DriverFactory {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--remote-allow-origins=*");
-                chromeOptions.addArguments("--start-maximized");
                 if (headlessMode) {
                     chromeOptions.addArguments("--headless=new");
+                    chromeOptions.addArguments("--window-size=1920,1080");
+                } else {
+                    chromeOptions.addArguments("--start-maximized");
                 }
                 driver = new ChromeDriver(chromeOptions);
                 logger.info("Chrome driver initialized");
@@ -76,13 +78,17 @@ public class DriverFactory {
         return driver;
     }
 
-    private static void configureDriver(WebDriver driver) {
+    private static void configureDriver(WebDriver driver, boolean headlessMode) {
         int implicitWait = getImplicitWait();
         int pageLoadTimeout = getPageLoadTimeout();
 
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(pageLoadTimeout));
-        driver.manage().window().maximize();
+
+        if (!headlessMode) {
+            driver.manage().window().maximize();
+        }
+
         logger.info("Driver configured with timeouts: implicit={}, pageLoad={}", implicitWait, pageLoadTimeout);
     }
 }

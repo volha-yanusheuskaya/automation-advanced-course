@@ -1,6 +1,6 @@
-package com.epam.automation.tests.base;
+package com.epam.automation.tests.testng.base;
 
-import com.epam.automation.business.models.LoginService;
+import com.epam.automation.business.service.LoginService;
 import com.epam.automation.business.models.User;
 import com.epam.automation.business.pages.DashboardPage;
 import com.epam.automation.business.pages.LoginPage;

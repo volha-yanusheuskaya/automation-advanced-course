@@ -1,14 +1,14 @@
-package com.epam.automation.tests;
+package com.epam.automation.tests.testng;
 
 import com.epam.automation.business.components.ToastComponent;
-import com.epam.automation.tests.base.BaseTest;
+import com.epam.automation.tests.testng.base.BaseTest;
 import com.epam.automation.business.pages.DashboardPage;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 public class LoginTest extends BaseTest {
 
-    @Test(groups = "smoke", priority = 1, description = "Verify successful login with valid credentials")
+    @Test(priority = 1, description = "Verify successful login with valid credentials")
     public void shouldLoginSuccessfully_WhenValidCredentialsProvided() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
         ToastComponent toastComponent = new ToastComponent();
@@ -24,7 +24,7 @@ public class LoginTest extends BaseTest {
         softAssert.assertAll();
     }
 
-    @Test(groups = "smoke", priority = 2, description = "Verify displaying of the Dashboard page after login")
+    @Test(priority = 2, description = "Verify displaying of the Dashboard page after login")
     public void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
 

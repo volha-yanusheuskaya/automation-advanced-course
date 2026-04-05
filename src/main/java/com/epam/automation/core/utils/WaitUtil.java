@@ -26,4 +26,8 @@ public class WaitUtil {
     public static void waitForUrlContains(String urlFragment) {
         getWait().until(ExpectedConditions.urlContains(urlFragment));
     }
+
+    public static void waitForElementContainsText(WebElement element, String expectedText) {
+        getWait().until(ExpectedConditions.textToBePresentInElement(element, expectedText));
+    }
 }
