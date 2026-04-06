@@ -1,5 +1,6 @@
 package com.epam.automation.business.pages;
 
+import com.epam.automation.business.components.ToastComponent;
 import com.epam.automation.core.base.BasePage;
 import com.epam.automation.core.config.ConfigurationReader;
 import org.openqa.selenium.WebElement;
@@ -51,5 +52,9 @@ public class DashboardPage extends BasePage {
 
     private static String configureDashboardUrl(String projectName) {
         return baseURL + "/ui/#" + projectName + "/dashboard";
+    }
+
+    public void closeToastComponent() {
+        new ToastComponent().clickCloseToast();
     }
 }

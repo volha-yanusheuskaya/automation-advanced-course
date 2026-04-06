@@ -1,5 +1,6 @@
-package com.epam.automation.business.models;
+package com.epam.automation.business.service;
 
+import com.epam.automation.business.models.User;
 import com.epam.automation.business.pages.DashboardPage;
 import com.epam.automation.business.pages.LoginPage;
 
