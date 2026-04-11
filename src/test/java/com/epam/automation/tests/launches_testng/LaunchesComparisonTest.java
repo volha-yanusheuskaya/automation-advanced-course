@@ -16,7 +16,7 @@ public class LaunchesComparisonTest extends BaseTest {
             priority = 4,
             description = "Verify that two launches can be compared"
     )
-    public void verifyTwoLaunchesComparison(String[][] expectedLaunchesToCompare) {
+    public void shouldVerifyTwoLaunchesComparison(String[][] expectedLaunchesToCompare) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -32,7 +32,7 @@ public class LaunchesComparisonTest extends BaseTest {
             priority = 4,
             description = "Verify that three launches can be compared"
     )
-    public void verifyThreeLaunchesComparison(String[][] expectedLaunchesToCompare) {
+    public void shouldVerifyThreeLaunchesComparison(String[][] expectedLaunchesToCompare) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

@@ -127,4 +127,10 @@ public class LaunchesService {
         launchesPage.clickActionsButton();
         launchesPage.clickCompareButton();
     }
+
+    public void removeSelectedLaunch() {
+        launchesPage.clickActionsButton();
+        launchesPage.clickDeleteButton();
+    }
+
 }

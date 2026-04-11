@@ -3,8 +3,8 @@ package com.epam.automation.tests.launches_testng;
 import com.epam.automation.business.components.ToastComponent;
 import com.epam.automation.tests.launches_testng.base.BaseTest;
 import com.epam.automation.business.pages.DashboardPage;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 
 public class LoginTest extends BaseTest {
 
@@ -16,21 +16,33 @@ public class LoginTest extends BaseTest {
         String actualToastMessage = toastComponent.getToastMessage();
         String expectedToastMessage = "Signed in successfully";
 
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(toastComponent.isToastComponentDisplayed(), "Toast component is not displayed");
-        softAssert.assertEquals(actualToastMessage, expectedToastMessage, "Toast message is not correct");
-        softAssert.assertTrue(dashboardPage.isDashboardPageTitle(), "Dashboard page title is not correct");
-        softAssert.assertTrue(dashboardPage.isDashboardPageUrl(), "Dashboard page URL is not correct");
-        softAssert.assertAll();
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(toastComponent.isToastComponentDisplayed())
+                .as("Toast component is not displayed")
+                .isTrue();
+        softly.assertThat(actualToastMessage)
+                .as("Toast message is not correct")
+                .isEqualTo(expectedToastMessage);
+        softly.assertThat(dashboardPage.isDashboardPageTitle())
+                .as("Dashboard page title is not correct")
+                .isTrue();
+        softly.assertThat(dashboardPage.isDashboardPageUrl())
+                .as("Dashboard page URL is not correct")
+                .isTrue();
+        softly.assertAll();
     }
 
     @Test(priority = 1, description = "Verify displaying of the Dashboard page after login")
     public void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
 
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(dashboardPage.isAllDashboardsTitleDisplayed(), "All Dashboards title is not displayed");
-        softAssert.assertTrue(dashboardPage.redirectToDemoDashboard().isDemoDashboardDisplayed(), "Demo Dashboard is not displayed");
-        softAssert.assertAll();
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(dashboardPage.isAllDashboardsHeadingDisplayed())
+                .as("All Dashboards heading is not displayed")
+                .isTrue();
+        softly.assertThat(dashboardPage.redirectToDemoDashboard().isDemoDashboardDisplayed())
+                .as("Demo Dashboard is not displayed")
+                .isTrue();
+        softly.assertAll();
     }
 }

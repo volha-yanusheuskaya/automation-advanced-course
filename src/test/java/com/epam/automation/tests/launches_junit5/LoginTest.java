@@ -25,10 +25,18 @@ public class LoginTest extends BaseTest {
         String actualToastMessage = toastComponent.getToastMessage();
         String expectedToastMessage = "Signed in successfully";
 
-        assertThat(toastComponent.isToastComponentDisplayed()).as("Toast component is not displayed").isTrue();
-        assertThat(actualToastMessage).as("Toast message is not correct").isEqualTo(expectedToastMessage);
-        assertThat(dashboardPage.isDashboardPageTitle()).as("Dashboard page title is not correct").isTrue();
-        assertThat(dashboardPage.isDashboardPageUrl()).as("Dashboard page URL is not correct").isTrue();
+        assertThat(toastComponent.isToastComponentDisplayed())
+                .as("Toast component is not displayed")
+                .isTrue();
+        assertThat(actualToastMessage)
+                .as("Toast message is not correct")
+                .isEqualTo(expectedToastMessage);
+        assertThat(dashboardPage.isDashboardPageTitle())
+                .as("Dashboard page title is not correct")
+                .isTrue();
+        assertThat(dashboardPage.isDashboardPageUrl())
+                .as("Dashboard page URL is not correct")
+                .isTrue();
     }
 
     @Test
@@ -36,7 +44,11 @@ public class LoginTest extends BaseTest {
     public void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
 
-        assertThat(dashboardPage.isAllDashboardsTitleDisplayed()).as("All Dashboards title is not displayed").isTrue();
-        assertThat(dashboardPage.redirectToDemoDashboard().isDemoDashboardDisplayed()).as("Demo Dashboard is not displayed").isTrue();
+        assertThat(dashboardPage.isAllDashboardsHeadingDisplayed())
+                .as("All Dashboards heading is not displayed")
+                .isTrue();
+        assertThat(dashboardPage.redirectToDemoDashboard().isDemoDashboardDisplayed())
+                .as("Demo Dashboard is not displayed")
+                .isTrue();
     }
 }

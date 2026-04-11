@@ -20,7 +20,7 @@ public class DashboardPage extends BasePage {
     private static final String DEMO_DASHBOARD_URL = configureDashboardUrl(DEMO_PROJECT);
 
     @FindBy(css = "span[title='All Dashboards']")
-    private WebElement allDashboardsTitle;
+    private WebElement allDashboardsHeading;
 
     @FindBy(xpath = "//div[contains(@class,'dashboardTable')]//a[contains(@href,'dashboard')]")
     private WebElement demoDashboard;
@@ -37,8 +37,8 @@ public class DashboardPage extends BasePage {
         return getCurrentUrl().equals(DEFAULT_DASHBOARD_URL);
     }
 
-    public boolean isAllDashboardsTitleDisplayed() {
-        return isDisplayed(allDashboardsTitle);
+    public boolean isAllDashboardsHeadingDisplayed() {
+        return isDisplayed(allDashboardsHeading);
     }
 
     public boolean isDemoDashboardDisplayed() {

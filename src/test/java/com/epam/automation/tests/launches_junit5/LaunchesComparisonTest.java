@@ -20,7 +20,7 @@ public class LaunchesComparisonTest extends BaseTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("com.epam.automation.tests.launches_junit5.data_provider.LaunchTestDataProvider#provideTwoLaunchesComparisonData")
     @DisplayName("Verify that two launches can be compared")
-    public void verifyTwoLaunchesComparison(String datasetName, String[][] expectedLaunchesToCompare, int[] launchIndexes) {
+    public void shouldVerifyTwoLaunchesComparison(String datasetName, String[][] expectedLaunchesToCompare, int[] launchIndexes) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -33,7 +33,7 @@ public class LaunchesComparisonTest extends BaseTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("com.epam.automation.tests.launches_junit5.data_provider.LaunchTestDataProvider#provideThreeLaunchesComparisonData")
     @DisplayName("Verify that three launches can be compared")
-    public void verifyThreeLaunchesComparison(String datasetName, String[][] expectedLaunchesToCompare, int[] launchIndexes) {
+    public void shouldVerifyThreeLaunchesComparison(String datasetName, String[][] expectedLaunchesToCompare, int[] launchIndexes) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -43,8 +43,8 @@ public class LaunchesComparisonTest extends BaseTest {
         verifyComparison(launchesPage, launchesService, expectedLaunchesToCompare, launchIndexes);
     }
 
-    private void verifyComparison(LaunchesPage launchesPage, LaunchesService launchesService, String[][] expectedLaunchesToCompare, int[] launchIndices) {
-        for (int index : launchIndices) {
+    private void verifyComparison(LaunchesPage launchesPage, LaunchesService launchesService, String[][] expectedLaunchesToCompare, int[] launchIndexes) {
+        for (int index : launchIndexes) {
             launchesPage.selectLaunchByIndex(index);
         }
         assertThat(launchesService.verifySelectedLaunches(expectedLaunchesToCompare))

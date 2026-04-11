@@ -6,7 +6,7 @@ import com.epam.automation.tests.launches_testng.data_provider.LaunchTestDataPro
 import com.epam.automation.tests.launches_testng.base.BaseTest;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LaunchesSortingTest extends BaseTest {
 
@@ -16,7 +16,7 @@ public class LaunchesSortingTest extends BaseTest {
             priority = 2,
             description = "Verify that launches are sorted by most recent by default"
     )
-    public void verifyLaunchesAreSortedByMostRecent(String[][] expectedSortedLaunches, int launchIndex) {
+    public void shouldVerifyLaunchesAreSortedByMostRecent(String[][] expectedSortedLaunches, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -24,7 +24,9 @@ public class LaunchesSortingTest extends BaseTest {
         launchesPage.redirectToLaunchesPage();
 
         boolean isLaunchesListSorted = launchesService.isLaunchesListSortedByMostRecent(expectedSortedLaunches, launchIndex);
-        assertTrue(isLaunchesListSorted, "Start times should be sorted in descending order (most recent first)");
+        assertThat(isLaunchesListSorted)
+                .as("Start times should be sorted in descending order (most recent first)")
+                .isTrue();
     }
 
     @Test(
@@ -33,7 +35,7 @@ public class LaunchesSortingTest extends BaseTest {
             priority = 2,
             description = "Verify that launches can be are sorted by name"
     )
-    public void verifyLaunchesAreSortedByName(String[][] expectedSortedLaunches, int launchIndex) {
+    public void shouldVerifyLaunchesAreSortedByName(String[][] expectedSortedLaunches, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -43,6 +45,8 @@ public class LaunchesSortingTest extends BaseTest {
         launchesService.sortLaunchesByName();
 
         boolean isLaunchesListSorted = launchesService.isLaunchesListSortedByName(expectedSortedLaunches,  launchIndex);
-        assertTrue(isLaunchesListSorted, "Launches should be sorted by name in ascending order");
+        assertThat(isLaunchesListSorted)
+                .as("Launches should be sorted by name in ascending order")
+                .isTrue();
     }
 }
