@@ -1,8 +1,7 @@
 Feature: Launches count data display feature
   The purpose of this feature is to test the display of launches count data in the Report Portal application.
 
-  Background: Login and navigate to the Launches page
-    Given User login with default credentials
+  Background: Navigate to the Launches page
     When User closes the Toast component
     And User navigates to the Launches page
 
@@ -16,7 +15,7 @@ Feature: Launches count data display feature
     And <index> launch should contain correct automation bugs: <automationBugs>
     And <index> launch should contain correct system issues: <systemIssues>
     And <index> launch should contain correct to investigate issues: <noDefects>
-    And <index> launch should have total steps equal sum of passed <passed>, failed <failed>, and skipped <skipped> steps
+    And <index> launch should have total steps equal sum of passed, failed, and skipped
 
     Examples:
       | index | total | passed | failed | skipped | productBugs | automationBugs | systemIssues | noDefects |

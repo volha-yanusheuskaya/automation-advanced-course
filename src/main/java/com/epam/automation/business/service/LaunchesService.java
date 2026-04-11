@@ -1,5 +1,6 @@
 package com.epam.automation.business.service;
 
+import com.epam.automation.business.models.Launch;
 import com.epam.automation.business.pages.LaunchesPage;
 import com.epam.automation.core.logger.ILogger;
 import com.epam.automation.core.logger.LoggerFactory;
@@ -107,6 +108,18 @@ public class LaunchesService {
         String oldFirstLaunchName = launchesPage.getTotalLaunches().getFirst().getText();
         launchesPage.clickNameColumnHeaderToSort();
         WaitUtil.waitForElementTextToChange(launchesPage.getTotalLaunches().getFirst(), oldFirstLaunchName);
+    }
+
+
+    /**
+     * Validates that the total steps equals the sum of passed, failed, and skipped.
+     *
+     * @param launch Launch object to validate
+     * @return true if total = passed + failed + skipped
+     */
+    public boolean isTotalStepsEqualToSum(Launch launch) {
+        int calculatedTotal = launch.getPassedSteps() + launch.getFailedSteps() + launch.getSkippedSteps();
+        return launch.getTotalSteps() == calculatedTotal;
     }
 
     public boolean verifySelectedLaunches(String[][] expectedSelectedLaunches) {

@@ -1,9 +1,6 @@
 Feature: Login test feature
   The purpose of this feature is to test the login functionality of the Report Portal application.
 
-  Background: Login to the Report Portal application
-    Given User login with default credentials
-
   Scenario: Successful login when valid credentials are provided
     Then Toast component should be displayed with message "Signed in successfully"
     And Dashboard page should be displayed with correct title

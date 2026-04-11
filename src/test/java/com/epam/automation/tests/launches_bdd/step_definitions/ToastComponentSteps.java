@@ -1,18 +1,35 @@
 package com.epam.automation.tests.launches_bdd.step_definitions;
 
 import com.epam.automation.business.components.ToastComponent;
-import com.epam.automation.business.cucumber.BaseStepDefinitions;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ToastComponentSteps extends BaseStepDefinitions {
+public class ToastComponentSteps {
+    private final ScenarioContext scenarioContext;
+
+    public ToastComponentSteps(ScenarioContext context) {
+        this.scenarioContext = context;
+    }
+
+    @When("User closes the Toast component")
+    public void userClosesTheToastComponent() {
+        ToastComponent toastComponent = scenarioContext.getToastComponent();
+        if (toastComponent != null && toastComponent.isToastComponentDisplayed()) {
+            toastComponent.clickCloseToast();
+        }
+    }
 
     @Then("Toast component should be displayed with message {string}")
     public void toastComponentShouldBeDisplayedWithMessage(String message) {
-        ToastComponent toastComponent = new ToastComponent();
-
-        toastComponent.isToastComponentDisplayed();
+        ToastComponent toastComponent = scenarioContext.getToastComponent();
+        assertThat(toastComponent)
+                .as("Toast component should not be null")
+                .isNotNull();
+        assertThat(toastComponent.isToastComponentDisplayed())
+                .as("Toast component should be displayed")
+                .isTrue();
         assertThat(toastComponent.getToastMessage())
                 .as("Toast message is not correct")
                 .isEqualTo(message);
