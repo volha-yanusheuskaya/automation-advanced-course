@@ -14,6 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.41.0</selenium.version>
         <testng.version>7.12.0</testng.version>
+        <juint-platform.version>1.12.1</juint-platform.version>
         <log4j.version>2.25.3</log4j.version>
         <reportportal.version>5.6.7</reportportal.version>
     </properties>
@@ -65,7 +66,28 @@
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
-            <version>1.11.4</version>
+            <version>${juint-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-engine</artifactId>
+            <version>${juint-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>${juint-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-commons</artifactId>
+            <version>${juint-platform.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -109,6 +131,26 @@
             <version>2.11.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>7.19.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>7.19.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-picocontainer</artifactId>
+            <version>7.19.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -132,11 +174,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                    <parallel>classes</parallel>
-                    <threadCount>3</threadCount>
+                    <!-- Exclude Cucumber by default (TestNG/JUnit5 run normally) -->
+                    <excludes>
+                        <exclude>**/launches_bdd/**</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>
@@ -165,6 +206,32 @@
                 </testResources>
             </build>
         </profile>
+
+        <profile>
+            <id>cucumber</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.2.2</version>
+                        <configuration>
+                            <includes>
+                                <include>**/CucumberRunner.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/launches_testng/**</exclude>
+                                <exclude>**/launches_junit5/**</exclude>
+                            </excludes>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.testng:testng</classpathDependencyExclude>
+                            </classpathDependencyExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
 </project>

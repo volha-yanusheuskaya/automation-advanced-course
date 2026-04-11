@@ -18,7 +18,7 @@ public class LaunchesCountDataTest extends BaseTest {
             priority = 3,
             description = "Verify that each launch contains correct test count data"
     )
-    public void verifyLaunchesCountData(Launch expectedLaunch, int launchIndex) {
+    public void shouldVerifyLaunchesCountData(Launch expectedLaunch, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

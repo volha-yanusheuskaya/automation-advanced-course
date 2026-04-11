@@ -56,8 +56,14 @@ public class LaunchesPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'total-col')]")
     private List<WebElement> totalSteps;
 
+    @FindBy(xpath = "//a[@statuses='PASSED,FAILED,SKIPPED,INTERRUPTED']")
+    private List<WebElement> allTotalSteps;
+
     @FindBy(xpath = "//div[contains(@class,'passed-col')]")
     private List<WebElement> passedSteps;
+
+    @FindBy(xpath = "//a[@statuses='PASSED']")
+    private List<WebElement> allPassedSteps;
 
     @FindBy(xpath = "//div[contains(@class,'failed-col')]")
     private List<WebElement> failedSteps;
@@ -86,8 +92,17 @@ public class LaunchesPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'actionPanel')]//span[text()='Compare']")
     private WebElement compareButton;
 
+    @FindBy(xpath = "//div[contains(@class,'actionPanel')]//span[text()='Delete']")
+    private WebElement deleteButton;
+
     @FindBy(xpath = "//div[contains(@class,'launch-compare-modal')]")
     private WebElement compareLaunchesModalWindow;
+
+    @FindBy(xpath = "//div[contains(@class,'modal-window')]//span[text()='Delete launch']")
+    private WebElement deleteLaunchModalWindow;
+
+    @FindBy(xpath = "//a[contains(@class,'viewTabs__active')]")
+    private WebElement listViewTab;
 
     public LaunchesPage() {
         super();
@@ -109,8 +124,31 @@ public class LaunchesPage extends BasePage {
         return launchName;
     }
 
+    public void clickFirstLaunch() {
+        WebElement firstLaunch = getLaunchNames().getFirst();
+        click(firstLaunch);
+    }
+
     private List<WebElement> getLaunchNumber() {
         return launchNumber;
+    }
+
+    private List<WebElement> getTotalStepsPassed() {
+        return allTotalSteps;
+    }
+
+    public void clickTotalStepsForFirstLaunch() {
+        WebElement firstLaunch = getTotalStepsPassed().getFirst();
+        click(firstLaunch);
+    }
+
+    private List<WebElement> getPassedStepsPassed() {
+        return allPassedSteps;
+    }
+
+    public void clickPassedStepsForFirstLaunch() {
+        WebElement firstLaunch = getPassedStepsPassed().getFirst();
+        click(firstLaunch);
     }
 
     /**
@@ -266,7 +304,20 @@ public class LaunchesPage extends BasePage {
         click(compareButton);
     }
 
+    public void clickDeleteButton() {
+        click(deleteButton);
+    }
+
     public boolean isCompareLaunchesModalWindowDisplayed() {
         return compareLaunchesModalWindow.isDisplayed();
     }
+
+    public boolean isDeleteLaunchModalWindowDisplayed() {
+        return deleteLaunchModalWindow.isDisplayed();
+    }
+
+    public boolean isListViewDisplayed() {
+        return listViewTab.isDisplayed();
+    }
+
 }

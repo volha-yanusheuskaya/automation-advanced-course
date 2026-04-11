@@ -1,0 +1,32 @@
+package com.epam.automation.tests.launches_junit5;
+
+import com.epam.automation.business.pages.LaunchesPage;
+import com.epam.automation.business.service.LaunchesService;
+import com.epam.automation.tests.launches_junit5.base.BaseTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DisplayName("Launch removal test suite")
+@Order(5)
+public class LaunchesRemovalTest extends BaseTest {
+
+    @Test
+    @DisplayName("Verify that the launch can be removed")
+    public void shouldVerifyLaunchRemoval() {
+        loginWithDefaultCredentials().closeToastComponent();
+
+        LaunchesPage launchesPage = new LaunchesPage();
+        LaunchesService launchesService = new LaunchesService(launchesPage);
+        launchesPage.redirectToLaunchesPage();
+
+        launchesPage.selectLaunchByIndex(1);
+        launchesService.removeSelectedLaunch();
+
+        assertThat(launchesPage.isDeleteLaunchModalWindowDisplayed())
+                .as("Delete launch modal window should be displayed")
+                .isTrue();
+    }
+}

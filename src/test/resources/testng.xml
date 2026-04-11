@@ -26,4 +26,16 @@
         </classes>
     </test>
 
+    <test name="Launches Removal Tests" enabled="true">
+        <classes>
+            <class name="com.epam.automation.tests.launches_testng.LaunchesRemovalTest"/>
+        </classes>
+    </test>
+
+    <test name="Launches View Tests" enabled="true">
+        <classes>
+            <class name="com.epam.automation.tests.launches_testng.LaunchesViewTest"/>
+        </classes>
+    </test>
+
 </suite>

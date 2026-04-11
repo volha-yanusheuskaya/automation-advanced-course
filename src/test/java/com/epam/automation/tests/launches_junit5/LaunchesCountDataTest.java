@@ -20,7 +20,7 @@ public class LaunchesCountDataTest extends BaseTest {
     @ParameterizedTest(name = "Launch #{index} - {0}")
     @MethodSource("com.epam.automation.tests.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchTestDataSets")
     @DisplayName("Verify that each launch contains correct test count data")
-    public void verifyLaunchesCountData(String datasetName, Launch expectedLaunch, int launchIndex) {
+    public void shouldVerifyLaunchesCountData(String datasetName, Launch expectedLaunch, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

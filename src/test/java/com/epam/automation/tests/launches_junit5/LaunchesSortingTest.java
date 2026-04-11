@@ -17,7 +17,7 @@ public class LaunchesSortingTest extends BaseTest {
     @ParameterizedTest(name = "Dataset {index}: {0}")
     @MethodSource("com.epam.automation.tests.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchesDataSetsByDefault")
     @DisplayName("Verify launches sorted by most recent")
-    public void verifyLaunchesSortedByMostRecentWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
+    public void shouldVerifyLaunchesSortedByMostRecentWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -34,7 +34,7 @@ public class LaunchesSortingTest extends BaseTest {
     @ParameterizedTest(name = "Dataset {index}: {0}")
     @MethodSource("com.epam.automation.tests.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchesDataSetsByName")
     @DisplayName("Verify launches sorted by name")
-    public void verifyLaunchesSortedByNameWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
+    public void shouldVerifyLaunchesSortedByNameWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
