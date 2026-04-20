@@ -15,7 +15,7 @@
         <selenium.version>4.41.0</selenium.version>
         <testng.version>7.12.0</testng.version>
         <juint-platform.version>1.12.1</juint-platform.version>
-        <log4j.version>2.25.3</log4j.version>
+        <log4j.version>2.25.4</log4j.version>
         <reportportal.version>5.6.7</reportportal.version>
     </properties>
 
@@ -152,6 +152,34 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>6.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>3.1.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.44</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.2.6</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -174,10 +202,15 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <!-- Exclude Cucumber by default (TestNG/JUnit5 run normally) -->
                     <excludes>
                         <exclude>**/launches_bdd/**</exclude>
                     </excludes>
+                    <properties>
+                        <configurationParameters>
+                            junit.jupiter.execution.parallel.enabled=true
+                        </configurationParameters>
+                    </properties>
+                    <failIfNoTests>false</failIfNoTests>
                 </configuration>
             </plugin>
         </plugins>
@@ -226,6 +259,7 @@
                             <classpathDependencyExcludes>
                                 <classpathDependencyExclude>org.testng:testng</classpathDependencyExclude>
                             </classpathDependencyExcludes>
+                            <failIfNoTests>false</failIfNoTests>
                         </configuration>
                     </plugin>
                 </plugins>

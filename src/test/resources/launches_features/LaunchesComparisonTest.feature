@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Launches comparison feature
   The purpose of this feature is to test the launches comparison functionality in the Report Portal application.
 

@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Launch removal feature
   The purpose of this feature is to test the launch removal functionality in the Report Portal application.
 

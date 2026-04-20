@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Login test feature
   The purpose of this feature is to test the login functionality of the Report Portal application.
 
