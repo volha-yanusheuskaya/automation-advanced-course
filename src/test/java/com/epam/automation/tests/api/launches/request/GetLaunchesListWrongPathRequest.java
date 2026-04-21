@@ -1,4 +1,4 @@
-package com.epam.automation.api.business.request.launches;
+package com.epam.automation.tests.api.launches.request;
 
 import com.epam.automation.api.business.request.BaseRequest;
 

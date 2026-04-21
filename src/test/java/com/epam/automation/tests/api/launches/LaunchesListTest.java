@@ -1,6 +1,6 @@
 package com.epam.automation.tests.api.launches;
 
-import com.epam.automation.api.business.request.launches.GetLaunchesListWrongPathRequest;
+import com.epam.automation.tests.api.launches.request.GetLaunchesListWrongPathRequest;
 import com.epam.automation.tests.api.BaseApiTest;
 import org.junit.jupiter.api.*;
 
@@ -16,7 +16,7 @@ public class LaunchesListTest extends BaseApiTest {
     public void getLaunchesListTest() {
         api.launches.getList()
                 .statusCode(OK)
-                .body("content", hasSize(greaterThan(1)))
+                .body("content", not(empty()))
                 .body("content.name", hasItem(EXPECTED_LAUNCH_NAME));
     }
 

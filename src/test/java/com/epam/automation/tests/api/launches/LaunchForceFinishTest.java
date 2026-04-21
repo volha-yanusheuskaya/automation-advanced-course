@@ -50,6 +50,8 @@ public class LaunchForceFinishTest extends BaseApiTest {
         api.launches.stop(launchId, finishPayload())
                 .statusCode(OK);
 
+        launchIsRunning = false;
+
         api.launches.getList()
                 .statusCode(OK)
                 .body("content.find { it.id == %d }.status", withArgs(launchId), equalTo("STOPPED"))
