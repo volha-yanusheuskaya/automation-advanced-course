@@ -5,14 +5,13 @@ import com.epam.automation.api.business.model.dto.PostItemRequestDto;
 import org.modelmapper.ModelMapper;
 
 public class ItemsMapper {
-    static ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper MAPPER = new ModelMapper();
 
-    static {
-        mapper.typeMap(Item.class, PostItemRequestDto.class);
+    private ItemsMapper() {
     }
 
-    public static <T> T map(Item item, Class<T> targetClass) {
-        return mapper.map(item, targetClass);
+    public static PostItemRequestDto map(Item item) {
+        return MAPPER.map(item, PostItemRequestDto.class);
     }
 
 }

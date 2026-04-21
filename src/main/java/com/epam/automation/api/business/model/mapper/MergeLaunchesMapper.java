@@ -5,14 +5,12 @@ import com.epam.automation.api.business.model.dto.PostLaunchMergeRequestDto;
 import org.modelmapper.ModelMapper;
 
 public class MergeLaunchesMapper {
+    private static final ModelMapper MAPPER = new ModelMapper();
 
-    static ModelMapper mapper = new ModelMapper();
-
-    static {
-        mapper.typeMap(MergeLaunch.class, PostLaunchMergeRequestDto.class);
+    private MergeLaunchesMapper() {
     }
 
-    public static <T> T map(MergeLaunch launch, Class<T> targetClass) {
-        return mapper.map(launch, targetClass);
+    public static PostLaunchMergeRequestDto map(MergeLaunch launch) {
+        return MAPPER.map(launch, PostLaunchMergeRequestDto.class);
     }
 }

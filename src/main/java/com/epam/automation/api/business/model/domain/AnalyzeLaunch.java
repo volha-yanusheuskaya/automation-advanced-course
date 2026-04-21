@@ -10,6 +10,6 @@ import java.util.List;
 public class AnalyzeLaunch {
     private int id;
     private String analyzerTypeName;
-    private String analyzerHistoryMode;
+    private String analyzerMode;
     private List<String> analyzeItemsMode;
 }

@@ -3,7 +3,6 @@ package com.epam.automation.ui.business.models;
 import com.epam.automation.common.core.config.ConfigurationReader;
 import lombok.Getter;
 
-
 @Getter
 public class User {
     private final String username;

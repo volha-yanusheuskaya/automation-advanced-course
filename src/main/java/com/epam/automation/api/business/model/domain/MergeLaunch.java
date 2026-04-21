@@ -13,7 +13,7 @@ public class MergeLaunch {
     private String startTime;
     private String endTime;
     private String mode;
-    private String mergeStrategyType;
+    private String mergeType;
     private Boolean extendSuitesDescription;
     private List<Integer> launches;
 }

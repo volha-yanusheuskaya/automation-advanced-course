@@ -11,81 +11,16 @@ import lombok.Setter;
  */
 @Getter
 public class Launch {
-    /**
-     * -- GETTER --
-     *  Gets the launch name.
-     *
-     *
-     * -- SETTER --
-     *  Sets the launch name.
-     *
-     @return the launch name (e.g., "Demo Api Tests #1")
-      * @param name the new launch name
-     */
     @Setter
     private String name;
-    /**
-     * -- GETTER --
-     *  Gets the launch execution date.
-     *
-     * @return the date in format "yyyy-MM-dd HH:mm:ss"
-     */
     private final String date;
-    /**
-     * -- GETTER --
-     *  Gets the total number of test steps in the launch.
-     *
-     * @return total steps count (should equal sum of passed, failed, and skipped)
-     */
     private final int totalSteps;
-    /**
-     * -- GETTER --
-     *  Gets the number of passed steps.
-     *
-     * @return count of passed steps
-     */
     private final int passedSteps;
-    /**
-     * -- GETTER --
-     *  Gets the number of failed steps.
-     *
-     * @return count of failed steps
-     */
     private final int failedSteps;
-    /**
-     * -- GETTER --
-     *  Gets the number of skipped steps.
-     *
-     * @return count of skipped steps
-     */
     private final int skippedSteps;
-    /**
-     * -- GETTER --
-     *  Gets the number of defects marked as Product Bugs.
-     *
-     * @return count of product bug defects
-     */
     private final int productBugCount;
-    /**
-     * -- GETTER --
-     *  Gets the number of defects marked as Automation Bugs.
-     *
-     * @return count of automation bug defects
-     */
     private final int autoBugCount;
-    /**
-     * -- GETTER --
-     *  Gets the number of defects marked as System Issues.
-     *
-     * @return count of system issue defects
-     */
     private final int systemIssueCount;
-    /**
-     * -- GETTER --
-     *  Gets the number of defects marked as To Investigate.
-     *
-     * @return count of defects requiring investigation
-     */
     private final int toInvestigateCount;
 
     /**

@@ -5,14 +5,13 @@ import com.epam.automation.api.business.model.dto.PostLaunchRequestDto;
 import org.modelmapper.ModelMapper;
 
 public class LaunchesMapper {
-    static ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper MAPPER = new ModelMapper();
 
-    static {
-        mapper.typeMap(Launch.class, PostLaunchRequestDto.class);
+    private LaunchesMapper() {
     }
 
-    public static <T> T map(Launch launch, Class<T> targetClass) {
-        return mapper.map(launch, targetClass);
+    public static PostLaunchRequestDto map(Launch launch) {
+        return MAPPER.map(launch, PostLaunchRequestDto.class);
     }
 
 }

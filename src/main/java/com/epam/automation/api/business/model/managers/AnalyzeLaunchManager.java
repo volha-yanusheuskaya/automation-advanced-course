@@ -10,7 +10,7 @@ public class AnalyzeLaunchManager {
         return AnalyzeLaunch.builder()
                 .id(launchId)
                 .analyzerTypeName("autoAnalyzer")
-                .analyzerHistoryMode("ALL")
+                .analyzerMode("ALL")
                 .analyzeItemsMode(List.of("TO_INVESTIGATE"))
                 .build();
     }

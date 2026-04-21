@@ -1,11 +1,9 @@
 package com.epam.automation.api.business.request;
 
-import com.epam.automation.common.core.config.ConfigurationReader;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import lombok.Getter;
 import lombok.Setter;
-import org.openqa.selenium.remote.http.HttpMethod;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,8 +31,7 @@ public class BaseRequest {
                 .pathParams(getPathParams())
                 .queryParams(getQueryParams())
                 .when()
-                .request(getMethod().name(),
-                        String.format("/%s/%s", ConfigurationReader.getDemoProjectName(), getUrl()))
+                .request(getMethod().name(), getUrl())
                 .then().log().all();
     }
 }

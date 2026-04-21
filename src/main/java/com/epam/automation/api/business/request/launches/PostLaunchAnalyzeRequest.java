@@ -3,13 +3,14 @@ package com.epam.automation.api.business.request.launches;
 import com.epam.automation.api.business.model.dto.PostLaunchAnalyzeRequestDto;
 import com.epam.automation.api.business.request.BaseRequest;
 
-import static org.openqa.selenium.remote.http.HttpMethod.POST;
+import static com.epam.automation.api.business.request.HttpMethod.POST;
+import static com.epam.automation.api.business.request.ProjectPath.demoProjectPath;
 
 public class PostLaunchAnalyzeRequest extends BaseRequest {
 
     public PostLaunchAnalyzeRequest(PostLaunchAnalyzeRequestDto dto) {
         setMethod(POST);
-        setUrl("launch/analyze");
+        setUrl(demoProjectPath("launch/analyze"));
         setBody(dto);
     }
 }

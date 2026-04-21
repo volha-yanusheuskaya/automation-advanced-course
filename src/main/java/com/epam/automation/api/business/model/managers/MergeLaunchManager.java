@@ -16,7 +16,7 @@ public class MergeLaunchManager {
                 .startTime(startTime)
                 .endTime(endTime)
                 .mode("DEFAULT")
-                .mergeStrategyType("BASIC")
+                .mergeType("BASIC")
                 .extendSuitesDescription(true)
                 .launches(List.of(firstLaunchId, secondLaunchId))
                 .build();

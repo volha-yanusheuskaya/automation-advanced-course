@@ -9,8 +9,6 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.equalTo;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(2)
 public class LaunchAnalysisTest extends BaseApiTest {
 
     private static final String LAUNCH_NAME = "Demo Api Tests - Analyze";
@@ -21,6 +19,7 @@ public class LaunchAnalysisTest extends BaseApiTest {
     private static final String ITEM_START_TIME = "2026-03-31T16:48:05Z";
     private static final String ITEM_END_TIME = "2026-03-31T16:48:06Z";
 
+    private Integer launchId;
 
     @BeforeEach
     void createLaunchWithFinishedItem() {
@@ -30,11 +29,16 @@ public class LaunchAnalysisTest extends BaseApiTest {
         launchId = resolveLaunchId(launchUuid);
     }
 
+    @AfterEach
+    void cleanup() {
+        deleteLaunch(launchId);
+    }
+
     @Test
-    @DisplayName("POST /launch/analyze to start launch analysis")
+    @DisplayName("POST /launch/analyze – starts analysis for a launch")
     public void launchAnalysisTest() {
         AnalyzeLaunch launch = AnalyzeLaunchManager.getAnalyzeLaunchById(launchId);
-        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch, PostLaunchAnalyzeRequestDto.class);
+        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch);
 
         api.launches.analyze(dto)
                 .statusCode(OK)
@@ -43,12 +47,12 @@ public class LaunchAnalysisTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("POST /launch/analyze with non-existent launch ID returns error")
+    @DisplayName("POST /launch/analyze – returns 404 for an invalid launch id")
     public void launchAnalysisWithInvalidIdTest() {
-        int invalidLaunchId = 999999;
+        int invalidLaunchId = Integer.MAX_VALUE;
 
         AnalyzeLaunch launch = AnalyzeLaunchManager.getAnalyzeLaunchById(invalidLaunchId);
-        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch, PostLaunchAnalyzeRequestDto.class);
+        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch);
 
         api.launches.analyze(dto)
                 .statusCode(NOT_FOUND)
@@ -57,11 +61,11 @@ public class LaunchAnalysisTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("POST /launch/analyze returns 400 for an unknown analyzer type")
+    @DisplayName("POST /launch/analyze – returns 400 for an unknown analyzer type")
     void analyzeWithInvalidAnalyzerTypeTest() {
         AnalyzeLaunch launch = AnalyzeLaunchManager.getAnalyzeLaunchById(launchId);
         launch.setAnalyzerTypeName("invalid-analyzer");
-        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch, PostLaunchAnalyzeRequestDto.class);
+        PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch);
 
         api.launches.analyze(dto)
                 .statusCode(BAD_REQUEST)

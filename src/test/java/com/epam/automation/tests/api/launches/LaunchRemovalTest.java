@@ -5,8 +5,6 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(1)
 public class LaunchRemovalTest extends BaseApiTest {
 
     private static final String LAUNCH_NAME = "Demo Api Tests - To remove";
@@ -18,6 +16,7 @@ public class LaunchRemovalTest extends BaseApiTest {
     private static final String ITEM_END_TIME = "2026-03-31T16:48:06Z";
 
     private String launchUuid;
+    private Integer launchId;
 
     @BeforeEach
     void createLaunchWithFinishedItem() {
@@ -27,8 +26,13 @@ public class LaunchRemovalTest extends BaseApiTest {
         launchId = resolveLaunchId(launchUuid);
     }
 
+    @AfterEach
+    void cleanup() {
+        deleteLaunch(launchId);
+    }
+
     @Test
-    @DisplayName("DELETE /launch/{id} removes the launch")
+    @DisplayName("DELETE /launch/{id} – deletes the launch")
     public void deleteLaunchByIdTest() {
         api.launches.delete(launchId)
                 .statusCode(OK);
@@ -39,8 +43,8 @@ public class LaunchRemovalTest extends BaseApiTest {
     }
 
     @Test
-    @DisplayName("DELETE /launch/{id} returns 404 for a non-existent launch")
-    void deleteNonExistentLaunchTest() {
+    @DisplayName("DELETE /launch/{id} – returns 404 for an invalid launch")
+    void deleteInvalidLaunchTest() {
         int nonExistentLaunchId = Integer.MAX_VALUE;
 
         api.launches.delete(nonExistentLaunchId)

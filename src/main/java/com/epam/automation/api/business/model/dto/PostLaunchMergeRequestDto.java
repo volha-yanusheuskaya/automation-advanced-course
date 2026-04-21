@@ -1,6 +1,5 @@
 package com.epam.automation.api.business.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -14,7 +13,5 @@ public class PostLaunchMergeRequestDto {
     private String mode;
     private Boolean extendSuitesDescription;
     private List<Integer> launches;
-
-    @JsonProperty("mergeType")
-    private String mergeStrategyType;
+    private String mergeType;
 }

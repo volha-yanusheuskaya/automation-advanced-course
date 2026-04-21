@@ -21,11 +21,6 @@ public class LaunchesController {
         return this.client.execute(request);
     }
 
-    public ValidatableResponse getListFromWrongPath() {
-        GetLaunchesListWrongPathRequest request = new GetLaunchesListWrongPathRequest();
-        return this.client.execute(request);
-    }
-
     public ValidatableResponse create(PostLaunchRequestDto dto) {
         PostLaunchesRequest request = new PostLaunchesRequest(dto);
         return this.client.execute(request);

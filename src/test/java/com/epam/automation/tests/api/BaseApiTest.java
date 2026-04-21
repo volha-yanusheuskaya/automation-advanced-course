@@ -9,12 +9,18 @@ import com.epam.automation.api.business.model.managers.ItemManager;
 import com.epam.automation.api.business.model.managers.LaunchManager;
 import com.epam.automation.api.business.model.mapper.ItemsMapper;
 import com.epam.automation.api.business.model.mapper.LaunchesMapper;
+import com.epam.automation.common.core.logger.ILogger;
+import com.epam.automation.common.core.logger.LoggerFactory;
 import com.epam.automation.common.core.model.StatusCode;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
+
+import java.util.List;
+import java.util.Map;
 
 @Tag("api")
 public abstract class BaseApiTest {
+
+    private static final ILogger logger = LoggerFactory.getLogger(BaseApiTest.class);
 
     protected static final int OK = StatusCode.OK.getCode();
     protected static final int CREATED = StatusCode.CREATED.getCode();
@@ -24,16 +30,9 @@ public abstract class BaseApiTest {
 
     protected final ApiClient api = new ApiClient();
 
-    protected Integer launchId;
-
-    @AfterEach
-    void cleanup() {
-        deleteLaunch(launchId);
-    }
-
     protected String startLaunch(String launchName, String launchStartTime) {
         Launch launch = LaunchManager.getLaunchByNameAndStartTime(launchName, launchStartTime);
-        PostLaunchRequestDto dto = LaunchesMapper.map(launch, PostLaunchRequestDto.class);
+        PostLaunchRequestDto dto = LaunchesMapper.map(launch);
 
         return api.launches.create(dto)
                 .statusCode(CREATED)
@@ -42,7 +41,7 @@ public abstract class BaseApiTest {
 
     protected void addFinishedItem(String itemName, String itemStartTime, String itemEndTime, String launchUuid) {
         Item item = ItemManager.getItemByNameAndTime(itemName, itemStartTime, itemEndTime, launchUuid);
-        PostItemRequestDto dto = ItemsMapper.map(item, PostItemRequestDto.class);
+        PostItemRequestDto dto = ItemsMapper.map(item);
 
         String itemId = api.items.start(dto)
                 .statusCode(CREATED)
@@ -54,25 +53,31 @@ public abstract class BaseApiTest {
 
     protected void finishLaunch(String launchEndTime, String launchUuid) {
         Launch launch = LaunchManager.getLaunchByEndTime(launchEndTime);
-        PostLaunchRequestDto dto = LaunchesMapper.map(launch, PostLaunchRequestDto.class);
+        PostLaunchRequestDto dto = LaunchesMapper.map(launch);
 
         api.launches.finish(launchUuid, dto)
                 .statusCode(OK);
     }
 
     protected int resolveLaunchId(String launchUuid) {
-        return api.launches.getList()
+        List<Map<String, Object>> content = api.launches.getList()
                 .statusCode(OK)
-                .extract().path("content.find { it.uuid == '%s' }.id", launchUuid);
+                .extract().jsonPath().getList("content");
+
+        return content.stream()
+                .filter(e -> launchUuid.equals(e.get("uuid")))
+                .map(e -> (Integer) e.get("id"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "Launch with uuid '" + launchUuid + "' not found"));
     }
 
     protected void deleteLaunch(Integer launchId) {
         if (launchId == null) return;
         try {
             api.launches.delete(launchId);
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            logger.warn("Cleanup failed for launch id={} : {}", launchId, e);
         }
-
     }
 }
