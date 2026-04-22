@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Launches view display feature
   The purpose of this feature is to test the display of the Launches view in the Report Portal application.
 

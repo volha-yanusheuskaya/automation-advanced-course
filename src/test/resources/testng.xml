@@ -4,37 +4,37 @@
 
     <test name="Login Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LoginTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LoginTest"/>
         </classes>
     </test>
 
     <test name="Launches Sorting Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LaunchesSortingTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LaunchesSortingTest"/>
         </classes>
     </test>
 
     <test name="Launches Count Data Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LaunchesCountDataTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LaunchesCountDataTest"/>
         </classes>
     </test>
 
     <test name="Launches Comparison Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LaunchesComparisonTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LaunchesComparisonTest"/>
         </classes>
     </test>
 
     <test name="Launches Removal Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LaunchesRemovalTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LaunchesRemovalTest"/>
         </classes>
     </test>
 
     <test name="Launches View Tests" enabled="true">
         <classes>
-            <class name="com.epam.automation.tests.launches_testng.LaunchesViewTest"/>
+            <class name="com.epam.automation.tests.ui.launches_testng.LaunchesViewTest"/>
         </classes>
     </test>
 

@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Launches count data display feature
   The purpose of this feature is to test the display of launches count data in the Report Portal application.
 

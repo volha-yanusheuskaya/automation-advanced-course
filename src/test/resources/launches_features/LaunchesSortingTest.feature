@@ -1,3 +1,4 @@
+@ui_bdd
 Feature: Launches sorting feature
   The purpose of this feature is to test the sorting functionality of the launches in the Report Portal application.
 

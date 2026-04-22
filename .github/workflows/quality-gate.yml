@@ -37,6 +37,8 @@ jobs:
           screenshot.path=./screenshots/
           dashboard.project=${{ secrets.RP_DEFAULT_PROJECT }}
           demo.project=${{ secrets.RP_DEMO_PROJECT }}
+          uri=${{ secrets.RP_URI }}
+          token=${{ secrets.RP_TOKEN }}
           EOF
           
           cat > src/test/resources/reportportal.properties << EOF
@@ -80,8 +82,18 @@ jobs:
       - name: Build with Maven
         run: mvn clean compile
 
-      - name: Run Tests
-        run: mvn test
+      - name: Run UI BDD tests
+        run: mvn -P cucumber test "-Dcucumber.filter.tags=@ui_bdd"
+        continue-on-error: false
+
+      - name: Run UI JUnit tests
+        if: always()
+        run: mvn test -Dgroups=ui_junit
+        continue-on-error: false
+
+      - name: Run API tests
+        if: always()
+        run: mvn test -Dgroups=api
         continue-on-error: false
 
       - name: Upload Test Results
