@@ -21,7 +21,7 @@ token=REPORT_PORTAL_TOKEN_HERE
 # export BROWSERSTACK_ACCESS_KEY=your_access_key
 
 # Execution mode: local | grid | browserstack
-execution.mode=grid
+execution.mode=local
 
 # Selenium Grid URL (used when execution.mode=grid or with -Pgrid)
 grid.url=http://localhost:4444/wd/hub

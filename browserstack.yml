@@ -10,15 +10,23 @@ platforms:
     osVersion: 11
     browserName: Chrome
     browserVersion: latest
+  - os: Windows
+    osVersion: 10
+    browserName: Firefox
+    browserVersion: latest
+  - os: OS X
+    osVersion: Ventura
+    browserName: Safari
+    browserVersion: latest
 
-browserstackAutomation: false
+browserstackAutomation: true
 browserstackLocal: false
 seleniumVersion:  4.41.0
 parallelsPerPlatform: 1
 
 projectName: BrowserStack Advanced Course
 buildName: bstack-demo
-buildIdentifier: ${BUILD_NUMBER}
+buildIdentifier: "#${GITHUB_RUN_NUMBER}"
 buildTag: 'regression,junit5,ui'
 
 debug: true

@@ -1,0 +1,62 @@
+# Selenoid - lightweight Selenium Grid alternative.
+services:
+  selenoid:
+    image: aerokube/selenoid:latest
+    container_name: selenoid
+    ports:
+      - "4444:4444"
+    volumes:
+      - ./config/selenoid:/etc/selenoid:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./target/selenoid/video:/opt/selenoid/video
+      - ./target/selenoid/logs:/opt/selenoid/logs
+    environment:
+      - TZ=UTC
+      - DOCKER_API_VERSION=1.44
+    command:
+      - "-conf"
+      - "/etc/selenoid/browsers.json"
+      - "-video-output-dir"
+      - "/opt/selenoid/video"
+      - "-log-output-dir"
+      - "/opt/selenoid/logs"
+      - "-container-network"
+      - "selenoid"
+      - "-limit"
+      - "4"
+    networks:
+      - selenoid
+
+  selenoid-healthcheck:
+    image: curlimages/curl:latest
+    container_name: selenoid-healthcheck
+    depends_on:
+      - selenoid
+    command: ["sleep", "infinity"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://selenoid:4444/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - selenoid
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui:latest
+    container_name: selenoid-ui
+    ports:
+      - "8090:8080"
+    depends_on:
+      selenoid-healthcheck:
+        condition: service_healthy
+    command: ["--selenoid-uri", "http://selenoid:4444"]
+    environment:
+      - TZ=UTC
+    networks:
+      - selenoid
+
+networks:
+  selenoid:
+    name: selenoid
+    driver: bridge

@@ -75,18 +75,19 @@ public class ConfigurationReader {
     }
 
     public static String getExecutionMode() {
-        String sysProp = System.getProperty("execution.mode");
-        if (sysProp != null && !sysProp.isBlank()) {
-            return sysProp;
-        }
-        return properties.getProperty("execution.mode", "local");
+        return getPropertyOrDefault("execution.mode", "local");
     }
 
     public static String getGridUrl() {
-        String sysProp = System.getProperty("grid.url");
-        if (sysProp != null && !sysProp.isBlank()) {
-            return sysProp;
-        }
-        return properties.getProperty("grid.url", "http://localhost:4444/wd/hub");
+        return getPropertyOrDefault("grid.url", "http://localhost:4444/wd/hub");
+    }
+
+    public static String getSelenoidUrl() {
+        return getPropertyOrDefault("selenoid.url", "http://localhost:4444/wd/hub");
+    }
+
+    private static String getPropertyOrDefault(String key, String defaultValue) {
+        String value = getProperty(key);
+        return (value != null && !value.isBlank()) ? value : defaultValue;
     }
 }
