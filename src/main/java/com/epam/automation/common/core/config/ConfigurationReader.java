@@ -31,6 +31,10 @@ public class ConfigurationReader {
     }
 
     public static String getProperty(String key) {
+        String sysProp = System.getProperty(key);
+        if (sysProp != null && !sysProp.isBlank()) {
+            return sysProp;
+        }
         return properties.getProperty(key);
     }
 
@@ -68,5 +72,21 @@ public class ConfigurationReader {
 
     public static int getPageLoadTimeout() {
         return Integer.parseInt(properties.getProperty("page.load.timeout", "45"));
+    }
+
+    public static String getExecutionMode() {
+        String sysProp = System.getProperty("execution.mode");
+        if (sysProp != null && !sysProp.isBlank()) {
+            return sysProp;
+        }
+        return properties.getProperty("execution.mode", "local");
+    }
+
+    public static String getGridUrl() {
+        String sysProp = System.getProperty("grid.url");
+        if (sysProp != null && !sysProp.isBlank()) {
+            return sysProp;
+        }
+        return properties.getProperty("grid.url", "http://localhost:4444/wd/hub");
     }
 }
