@@ -1,0 +1,40 @@
+framework: junit5
+
+userName: ${BROWSERSTACK_USERNAME}
+accessKey: ${BROWSERSTACK_ACCESS_KEY}
+
+timezone: UTC
+
+platforms:
+  - os: Windows
+    osVersion: 11
+    browserName: Chrome
+    browserVersion: latest
+  - os: Windows
+    osVersion: 10
+    browserName: Firefox
+    browserVersion: latest
+  - os: OS X
+    osVersion: Ventura
+    browserName: Safari
+    browserVersion: latest
+
+browserstackAutomation: true
+browserstackLocal: false
+seleniumVersion:  4.41.0
+parallelsPerPlatform: 1
+
+projectName: BrowserStack Advanced Course
+buildName: bstack-demo
+buildIdentifier: "#${GITHUB_RUN_NUMBER}"
+buildTag: 'regression,junit5,ui'
+
+debug: true
+networkLogs: true
+consoleLogs: info
+idleTimeout: 300
+
+testObservability: true
+
+accessibility: false
+percy: false

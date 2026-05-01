@@ -1,236 +1,365 @@
 # Automation Advanced Course Framework
 
-Production-ready test automation framework built with Java, Selenium, TestNG, and ReportPortal.
+Test automation framework for UI and API testing built with Java 21, Selenium WebDriver, JUnit 5, TestNG, Cucumber, and REST Assured.
+
+---
+
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Execution Modes](#execution-modes)
+- [Running Tests](#running-tests)
+- [Maven Profiles](#maven-profiles)
+- [Selenium Grid (Docker)](#selenium-grid-docker)
+- [BrowserStack](#browserstack)
+- [CI/CD (GitHub Actions)](#cicd-github-actions)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Technologies](#technologies)
+
+---
+
+## Prerequisites
+
+- Java 21
+- Maven 3.9+
+- Docker + Docker Compose (for Selenium Grid)
+- Git
 
 ---
 
 ## Quick Start
 
-### Prerequisites
-- Java 21
-- Maven 3.9+
-- Git
-
-### Setup (5 minutes)
-
-1. Clone and navigate to project
 ```bash
+# 1. Clone the repository
 git clone <repository-url>
 cd automation-advanced-course
-```
 
-2. Configure test environment
-```bash
-cp src/test/resources/config.properties.example src/test/resources/config.properties
-# Edit config.properties with your application URL and test credentials
-```
-
-3. Build project
-```bash
+# 2. Build the project
 mvn clean compile
+
+# 3. Run tests locally
+mvn clean test
 ```
 
-4. Run tests
-```bash
-mvn clean test
+---
+
+## Execution Modes
+
+The framework supports three execution modes, controlled by **Maven profiles** or the `execution.mode` property in `config.properties`:
+
+| Mode | Profile | How it runs | When to use |
+|---|---|---|---|
+| **Local** | _(default)_ | Browser on your machine | Development, debugging |
+| **Grid** | `-Pgrid` | Browser in Docker containers | Parallel runs, CI/CD |
+| **BrowserStack** | `-Pbrowserstack` | Browser on BrowserStack cloud | Cross-browser/OS testing |
+
+**Priority:** Maven profile (system property) → `config.properties` → default (`local`)
+
+You can also switch modes in `config.properties` for quick IDE runs:
+```properties
+execution.mode=local    # or grid, browserstack
 ```
 
 ---
 
 ## Running Tests
 
-Run all tests
+### All tests (local)
 ```bash
 mvn clean test
 ```
 
-Run specific test
+### Specific test class
 ```bash
 mvn clean test -Dtest=LoginTest
 ```
 
-Run in headless mode (for CI/CD)
+### By test group
+```bash
+mvn clean test -Dgroups=ui_junit     # UI tests (JUnit 5)
+mvn clean test -Dgroups=api          # API tests
+```
+
+### Choose browser
+```bash
+mvn clean test -Dbrowser=firefox     # chrome (default), firefox, edge, safari
+```
+
+### Headless mode
 ```bash
 mvn clean test -Dheadless=true
 ```
 
+### BDD tests (Cucumber)
+```bash
+mvn clean test -Pcucumber "-Dcucumber.filter.tags=@ui_bdd"
+```
+
 ---
 
-## View Test Results
+## Maven Profiles
 
-Test logs
-```bash
-cat logs/automation.log
+| Profile | Command | Description |
+|---|---|---|
+| `grid` | `mvn test -Pgrid` | Run tests on Selenium Grid |
+| `browserstack` | `mvn test -Pbrowserstack` | Run tests on BrowserStack |
+| `cucumber` | `mvn test -Pcucumber` | Run Cucumber BDD tests |
+| `api` | `mvn test -Papi` | Run API tests only |
+| `testng-class-parallel` | `mvn test -Ptestng-class-parallel` | Parallel TestNG execution |
+| `junit-class-parallel` | `mvn test -Pjunit-class-parallel` | Parallel JUnit 5 execution |
+
+Profiles can be combined: `mvn test -Pcucumber,grid`
+
+---
+
+## Selenium Grid (Docker)
+
+Run tests in isolated Docker containers with Selenium Grid (Hub + browser nodes).
+
+### Architecture
+```
+Your machine
+  └── Selenium Hub (localhost:4444) ── routes requests
+        ├── Chrome node  (up to 2 sessions)
+        └── Firefox node (up to 2 sessions)
 ```
 
-Screenshots
+### Start the Grid
 ```bash
-open screenshots/  # macOS
-xdg-open screenshots/  # Linux
+# macOS Apple Silicon (ARM)
+docker-compose -f docker-compose.grid.yml up -d
+
+# Verify it's running
+curl -s http://localhost:4444/status | grep ready
 ```
+
+### Run tests on Grid
+```bash
+# Using Maven profile (recommended)
+mvn clean test -Pgrid
+
+# Choose a different browser
+mvn clean test -Pgrid -Dbrowser=firefox
+
+# Or via system properties directly
+mvn clean test -Dexecution.mode=grid -Dgrid.url=http://localhost:4444/wd/hub
+```
+
+### Stop the Grid
+```bash
+docker-compose -f docker-compose.grid.yml down
+```
+
+### Docker Compose files
+
+| File | Images | Platform |
+|---|---|---|
+| `docker-compose.grid.yml` | `seleniarm/*` (ARM) | macOS Apple Silicon |
+| `docker-compose.grid-ci.yml` | `selenium/*` (amd64) | GitHub Actions / Linux |
+
+### Grid Console
+- Status: http://localhost:4444/status
+- UI: http://localhost:4444/ui
+
+---
+
+## BrowserStack
+
+Run tests on BrowserStack cloud for cross-browser and cross-OS testing.
+
+### Setup
+
+1. Set environment variables:
+```bash
+export BROWSERSTACK_USERNAME=your_username
+export BROWSERSTACK_ACCESS_KEY=your_access_key
+```
+
+2. Platform configuration is in `browserstack.yml`:
+```yaml
+platforms:
+  - os: Windows
+    osVersion: 11
+    browserName: Chrome
+    browserVersion: latest
+```
+
+### Run tests
+```bash
+mvn clean test -Pbrowserstack
+```
+
+### What the profile does
+- Adds `browserstack-java-sdk` dependency
+- Attaches the BrowserStack java-agent (intercepts driver creation)
+- Sets `execution.mode=browserstack`
+- Test Observability reports are sent to BrowserStack dashboard
+
+---
+
+## CI/CD (GitHub Actions)
+
+The pipeline (`.github/workflows/quality-gate.yml`) runs on every push/PR to `main` and `develop`:
+
+```
+1. Checkout code
+2. Set up JDK 21
+3. Create config from GitHub Secrets
+4. Build (mvn compile)
+5. Start Selenium Grid (docker-compose.grid-ci.yml)
+6. Run UI JUnit tests on Grid (-Pgrid)
+7. Run API tests
+8. Stop Selenium Grid
+9. Upload test results and screenshots as artifacts
+```
+
+### Required GitHub Secrets
+
+| Secret | Description |
+|---|---|
+| `REPORTPORTAL_URL` | ReportPortal application URL |
+| `REPORTPORTAL_USERNAME` | Test user login |
+| `REPORTPORTAL_PASSWORD` | Test user password |
+| `RP_DEFAULT_PROJECT` | Dashboard project name |
+| `RP_DEMO_PROJECT` | Demo project name |
+| `RP_URI` | ReportPortal API URI |
+| `RP_TOKEN` | ReportPortal API token |
+| `REPORTPORTAL_ENDPOINT` | ReportPortal endpoint |
+| `REPORTPORTAL_UUID` | ReportPortal UUID |
+| `REPORTPORTAL_PROJECT` | ReportPortal project |
 
 ---
 
 ## Project Structure
 
-Framework code
 ```
-src/main/java/com/epam/automation/
-  core/
-    base/          - BasePage for page objects
-    config/        - Configuration management
-    driver/        - WebDriver management
-    logger/        - Log4j2 logging
-    utils/         - Utility classes
-  business/
-    pages/         - Page objects
-```
-
-Tests
-```
-src/test/java/com/epam/automation/
-  tests/
-    LoginTest.java - Example test
-    base/          - BaseTest with setup/teardown
-    listeners/     - Test listeners
-```
-
-Configuration
-```
-src/test/resources/
-  config.properties         - Test configuration
-  testng.xml               - TestNG suite config
-  reportportal.properties  - ReportPortal config
-```
-
----
-
-## Features
-
-Logger - Apache Log4j2
-- Multiple log levels (DEBUG, INFO, WARN, ERROR, FATAL)
-- Console output
-- File output (logs/automation.log)
-- ReportPortal integration
-
-Reporter - ReportPortal
-- Test execution tracking via TestNG integration
-- Automatic screenshot capture on test success/failure
-- Log aggregation with Log4j2 integration
-- Asynchronous logging support
-
-Test Runner - TestNG
-- Parallel execution (2 threads)
-- Test grouping and filtering
-- Lifecycle management
-- Maven Surefire integration
-
-Configuration
-- Centralized property management
-- Environment-specific settings
-- Easy customization
-
-Utilities
-- Element operations with waits
-- Screenshot capture
-- Wait management
-- Sensitive data masking
-
----
-
-## Writing Tests
-
-Create page object
-```java
-public class MyPage extends BasePage {
-    @FindBy(id = "button-id")
-    private WebElement myButton;
-
-    public MyPage(WebDriver driver) {
-        super(driver);
-    }
-
-    public void clickButton() {
-        click(myButton);
-    }
-}
+src/
+├── main/java/com/epam/automation/
+│   ├── api/business/              # API layer
+│   │   ├── client/                  - HTTP clients
+│   │   ├── controller/              - API controllers
+│   │   ├── model/                   - API response models
+│   │   └── request/                 - API request builders
+│   ├── common/core/               # Shared utilities
+│   │   ├── config/                  - ConfigurationReader
+│   │   ├── data_reader/             - Test data readers
+│   │   ├── logger/                  - ILogger, LoggerFactory
+│   │   └── model/                   - Shared models
+│   └── ui/                        # UI layer
+│       ├── core/
+│       │   ├── base/                - BasePage
+│       │   ├── driver/              - DriverFactory, ExecutionMode, BrowserType
+│       │   └── utils/               - ScreenshotUtil, wait helpers
+│       └── business/
+│           ├── components/          - Reusable UI components
+│           ├── models/              - UI data models
+│           ├── pages/               - Page Objects
+│           └── service/             - Business-level services
+│
+├── test/java/com/epam/automation/tests/
+│   ├── api/
+│   │   ├── BaseApiTest.java         - API test base class
+│   │   └── launches/                - API test classes
+│   └── ui/
+│       ├── data/                    - Test data providers
+│       ├── launches_junit5/         - JUnit 5 UI tests
+│       ├── launches_testng/         - TestNG UI tests
+│       ├── launches_bdd/            - Cucumber BDD tests
+│       └── listeners/               - TestListener, ReportPortalListener
+│
+└── test/resources/
+    ├── config.properties            - Test configuration
+    ├── reportportal.properties      - ReportPortal settings
+    ├── testng.xml                   - TestNG suite config
+    └── junit-platform.properties    - JUnit 5 parallel config
 ```
 
-Create test
-```java
-public class MyTest extends BaseTest {
-    @Test
-    public void testExample() {
-        MyPage page = new MyPage(driver);
-        page.clickButton();
-        
-        Assert.assertTrue(condition, "Test assertion message");
-    }
-}
-```
+### Key files in project root
+
+| File | Purpose |
+|---|---|
+| `pom.xml` | Maven build, dependencies, profiles |
+| `docker-compose.grid.yml` | Selenium Grid for local dev (ARM) |
+| `docker-compose.grid-ci.yml` | Selenium Grid for CI (amd64) |
+| `browserstack.yml` | BrowserStack SDK configuration |
+| `.github/workflows/quality-gate.yml` | CI/CD pipeline |
 
 ---
 
 ## Configuration
 
-Edit src/test/resources/config.properties
-```properties
-browser=chrome                         # chrome, firefox, edge, safari
-headless=false                         # false = visible browser window, true = hidden browser
-url=http://localhost:8080/ui/#login    # ReportPortal login page (local Docker)
-username=test_user                     # Test credentials
-password=test_password
-screenshot.path=./screenshots/
-```
+### `config.properties`
 
----
+| Property | Default | Description |
+|---|---|---|
+| `browser` | `chrome` | Browser: chrome, firefox, edge, safari |
+| `headless` | `false` | Run browser without UI |
+| `url` | — | Application URL |
+| `username` | — | Test user login |
+| `password` | — | Test user password |
+| `execution.mode` | `local` | Execution mode: local, grid, browserstack |
+| `grid.url` | `http://localhost:4444/wd/hub` | Selenium Grid hub URL |
+| `screenshot.path` | `./screenshots/` | Screenshot save location |
 
-## Parallel Execution
-- Configured for 2 parallel threads (safe for CI environments)
-- Each test gets isolated WebDriver via ThreadLocal
-- Increase for local runs: `mvn test -DthreadCount=4`
+All properties can be overridden via system properties: `-Dbrowser=firefox`
 
 ---
 
 ## Technologies
 
-- Java 21
-- Selenium WebDriver 4.41.0
-- TestNG 7.12.0
-- Apache Log4j2 2.25.3
-- ReportPortal 5.x
-- WebDriverManager 6.3.3
-- Maven 3.9+
+| Technology | Version | Purpose |
+|---|---|---|
+| Java | 21 | Language |
+| Selenium WebDriver | 4.41.0 | Browser automation |
+| JUnit 5 | 5.11.4 | Test runner (UI + API) |
+| TestNG | 7.12.0 | Test runner (UI) |
+| Cucumber | 7.19.0 | BDD test runner |
+| REST Assured | 6.0.0 | API testing |
+| AssertJ | 3.27.7 | Fluent assertions |
+| Log4j2 | 2.25.4 | Logging |
+| ReportPortal | 5.x | Test reporting |
+| BrowserStack SDK | 1.57.0 | Cloud browser testing |
+| WebDriverManager | 6.3.3 | Driver binary management |
+| Lombok | 1.18.44 | Boilerplate reduction |
+| Jackson | 2.17.2 | JSON serialization |
+| Docker Compose | — | Selenium Grid infrastructure |
+| GitHub Actions | — | CI/CD |
 
 ---
 
-## Common Issues
+## Test Results
 
-Issue: Can't find driver
-Solution: WebDriverManager auto-downloads drivers. Ensure internet connection.
-
-Issue: Connection refused
-Solution: Verify application is running and URL is correct in config.properties
-
-Issue: Test timeout
-Solution: Check if application is slow or increase timeout in BasePage.java
-
----
-
-## Logging Best Practices
-
-Use Log4j2 logger for all output:
-```java
-ILogger logger = LoggerFactory.getLogger(MyTest.class);
-logger.info("Test message");
-logger.logStep("Performing action");
+### Logs
+```bash
+cat logs/automation.log
 ```
 
-Do NOT use System.out.println() - use logger instead.
+### Screenshots (captured on test failure)
+```bash
+open screenshots/    # macOS
+```
+
+### Surefire reports
+```bash
+open target/surefire-reports/
+```
+
+---
+
+## Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| Browser driver not found | WebDriverManager auto-downloads. Check internet connection. |
+| Grid connection refused | Verify Grid is running: `curl http://localhost:4444/status` |
+| BrowserStack not creating reports | Ensure `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` env vars are set |
+| Tests run locally instead of Grid | Check `execution.mode` in config or use `-Pgrid` profile |
+| Docker images won't pull | Check Docker/Colima is running: `colima status` or `docker info` |
+| Blank Grid UI page | Grid is working — verify with `curl http://localhost:4444/status` |
 
 ---
 
 Framework Version: 1.0-SNAPSHOT
-
-Last Updated: March 30, 2026
-
+Last Updated: April 29, 2026

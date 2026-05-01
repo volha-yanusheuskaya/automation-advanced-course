@@ -27,6 +27,12 @@ jobs:
           cache: maven
 
       - name: Create Configuration
+        # NOTE: execution.mode and selenoid.url are intentionally NOT written here.
+        # They are injected as system properties by the Maven `-Pselenoid` profile
+        # (see pom.xml -> profiles/selenoid -> surefire systemPropertyVariables),
+        # which keeps the runtime grid/local switch driven by Maven profiles rather
+        # than by config.properties. Add them here only if you need to override
+        # the profile defaults for this workflow.
         run: |
           cat > src/test/resources/config.properties << EOF
           browser=chrome
@@ -80,21 +86,58 @@ jobs:
             ${{ runner.os }}-maven-    
 
       - name: Build with Maven
-        run: mvn clean compile
+        run: mvn clean compile -DskipTests
 
-      - name: Run UI BDD tests
-        run: mvn -P cucumber test "-Dcucumber.filter.tags=@ui_bdd"
-        continue-on-error: false
+      - name: Start Selenoid
+        # The `selenoid` Docker network is created by docker compose itself
+        # (see networks.selenoid.name in docker-compose.selenoid.yml), which
+        # is also the network name passed to selenoid via `-container-network`.
+        # Do NOT pre-create it with `docker network create` — compose would
+        # then refuse to adopt the unlabeled network and fail with:
+        #   "network <name> was found but has incorrect label
+        #    com.docker.compose.network set to ''".
+        #
+        # IMPORTANT: the browser images pulled here MUST match the images
+        # referenced in config/selenoid/browsers.json. Selenoid spawns
+        # browser containers on demand and will fail the WebDriver session
+        # if the image is not already present locally.
+        #
+        # Only Chrome is pre-pulled because CI runs with browser=chrome.
+        # Note: config/selenoid/browsers.json also lists `selenoid/vnc_firefox:128.0`,
+        # but that tag is not published on Docker Hub — pulling it would fail
+        # with "manifest unknown". If Firefox tests are enabled in CI later,
+        # update browsers.json to a published vnc_firefox tag and add the
+        # matching `docker pull` here.
+        run: |
+          mkdir -p target/selenoid/video target/selenoid/logs
+          docker pull selenoid/vnc_chrome:128.0
+          docker pull selenoid/video-recorder:latest-release
+          docker compose -f docker-compose.selenoid.yml up -d
 
-      - name: Run UI JUnit tests
-        if: always()
-        run: mvn test -Dgroups=ui_junit
-        continue-on-error: false
+      - name: Wait for Selenoid to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:4444/status | grep -q '"total"'; then
+              echo "✅ Selenoid ready after $((i * 2))s"
+              curl -s http://localhost:4444/status
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "❌ Selenoid did not become ready within 60s"
+          docker compose -f docker-compose.selenoid.yml logs selenoid || true
+          exit 1
+
+      - name: Run UI tests on Selenoid
+        run: mvn test -Pselenoid -Dgroups=ui_junit
 
       - name: Run API tests
         if: always()
         run: mvn test -Dgroups=api
-        continue-on-error: false
+
+      - name: Stop Selenoid
+        if: always()
+        run: docker compose -f docker-compose.selenoid.yml down
 
       - name: Upload Test Results
         if: always()

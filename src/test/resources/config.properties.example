@@ -1,14 +1,27 @@
+# Configuration properties for test automation
+
+# UI testing settings
 browser=chrome
 headless=false
+screenshot.path=./screenshots/
 
 url=https://reportportal.epam.com
 username=YOUR_USERNAME_HERE
 password=YOUR_PASSWORD_HERE
 
-screenshot.path=./screenshots/
-
 dashboard.project=YOUR_DASHBOARD_PROJECT_HERE
 demo.project=YOUR_DEMO_PROJECT_HERE
 
+# API testing settings
 uri=https://rp.epam.com/api/v1
 token=REPORT_PORTAL_TOKEN_HERE
+
+# BrowserStack credentials: set as environment variables
+# export BROWSERSTACK_USERNAME=your_username
+# export BROWSERSTACK_ACCESS_KEY=your_access_key
+
+# Execution mode: local | grid | browserstack
+execution.mode=local
+
+# Selenium Grid URL (used when execution.mode=grid or with -Pgrid)
+grid.url=http://localhost:4444/wd/hub
