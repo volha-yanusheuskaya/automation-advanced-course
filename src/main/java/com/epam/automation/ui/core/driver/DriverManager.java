@@ -8,6 +8,10 @@ public class DriverManager {
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
     private static final ILogger logger = LoggerFactory.getLogger(DriverManager.class);
 
+    private DriverManager() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static WebDriver getDriver() {
         if (driverThreadLocal.get() == null) {
             driverThreadLocal.set(DriverFactory.createDriver());

@@ -4,6 +4,10 @@ import java.io.File;
 
 public class LoggerFactory {
 
+    private LoggerFactory() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     static {
         File logsDir = new File("logs");
         if (!logsDir.exists()) {

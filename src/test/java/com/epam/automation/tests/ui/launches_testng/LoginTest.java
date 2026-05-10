@@ -1,12 +1,12 @@
 package com.epam.automation.tests.ui.launches_testng;
 
 import com.epam.automation.ui.business.components.ToastComponent;
-import com.epam.automation.tests.ui.launches_testng.base.BaseTest;
+import com.epam.automation.tests.ui.launches_testng.base.TestNgUiTestBase;
 import com.epam.automation.ui.business.pages.DashboardPage;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
-public class LoginTest extends BaseTest {
+public class LoginTest extends TestNgUiTestBase {
 
     @Test(priority = 1, description = "Verify successful login with valid credentials")
     public void shouldLoginSuccessfully_WhenValidCredentialsProvided() {

@@ -53,7 +53,7 @@ public class Log4j2Logger implements ILogger {
 
     @Override
     public void logTestEnd(String testName, String status) {
-        logger.info("Test {} : {}", status.toUpperCase(), testName);
+        logger.info("Test {} : {}", status::toUpperCase, () -> testName);
     }
 
     @Override

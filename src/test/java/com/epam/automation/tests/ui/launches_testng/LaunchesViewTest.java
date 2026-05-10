@@ -1,12 +1,12 @@
 package com.epam.automation.tests.ui.launches_testng;
 
 import com.epam.automation.ui.business.pages.LaunchesPage;
-import com.epam.automation.tests.ui.launches_testng.base.BaseTest;
+import com.epam.automation.tests.ui.launches_testng.base.TestNgUiTestBase;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LaunchesViewTest extends BaseTest {
+public class LaunchesViewTest extends TestNgUiTestBase {
 
     @Test(priority = 6, description = "Verify that the launch view can be opened by click launch name")
     public void shouldOpenLaunchViewWhenClickingLaunchName() {

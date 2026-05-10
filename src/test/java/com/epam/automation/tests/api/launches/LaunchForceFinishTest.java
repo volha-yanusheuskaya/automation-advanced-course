@@ -12,7 +12,7 @@ import org.junit.jupiter.api.*;
 import static io.restassured.RestAssured.withArgs;
 import static org.hamcrest.Matchers.*;
 
-public class LaunchForceFinishTest extends BaseApiTest {
+class LaunchForceFinishTest extends BaseApiTest {
 
     private static final ILogger logger = LoggerFactory.getLogger(LaunchForceFinishTest.class);
 
@@ -46,7 +46,7 @@ public class LaunchForceFinishTest extends BaseApiTest {
 
     @Test
     @DisplayName("PUT /launch/{launchId}/finish to force finish launch")
-    public void forceFinishLaunchByIdTest() {
+    void forceFinishLaunchByIdTest() {
         api.launches.stop(launchId, finishPayload())
                 .statusCode(OK);
 

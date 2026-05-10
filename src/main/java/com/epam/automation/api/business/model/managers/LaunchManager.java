@@ -4,6 +4,10 @@ import com.epam.automation.api.business.model.domain.Launch;
 
 public class LaunchManager {
 
+    private LaunchManager() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static Launch getLaunchByNameAndStartTime(String launchName, String startTime) {
         return Launch.builder()
                 .name(launchName)

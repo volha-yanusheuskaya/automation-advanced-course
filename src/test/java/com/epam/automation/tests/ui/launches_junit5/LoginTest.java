@@ -2,7 +2,7 @@ package com.epam.automation.tests.ui.launches_junit5;
 
 import com.epam.automation.ui.business.components.ToastComponent;
 import com.epam.automation.ui.business.pages.DashboardPage;
-import com.epam.automation.tests.ui.launches_junit5.base.BaseTest;
+import com.epam.automation.tests.ui.launches_junit5.base.JunitUiTestBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -14,11 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Login test suite")
 @TestMethodOrder(OrderAnnotation.class)
 @Order(1)
-public class LoginTest extends BaseTest {
+class LoginTest extends JunitUiTestBase {
 
     @Test
     @DisplayName("Verify successful login with valid credentials")
-    public void shouldLoginSuccessfully_WhenValidCredentialsProvided() {
+    void shouldLoginSuccessfully_WhenValidCredentialsProvided() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
         ToastComponent toastComponent = new ToastComponent();
 
@@ -41,7 +41,7 @@ public class LoginTest extends BaseTest {
 
     @Test
     @DisplayName("Verify displaying of the Dashboard page after login")
-    public void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
+    void shouldDisplayDashboardPage_WhenUserIsLoggedIn() {
         DashboardPage dashboardPage = loginWithDefaultCredentials();
 
         assertThat(dashboardPage.isAllDashboardsHeadingDisplayed())

@@ -3,7 +3,7 @@ package com.epam.automation.tests.ui.launches_junit5;
 import com.epam.automation.ui.business.models.Launch;
 import com.epam.automation.ui.business.service.LaunchesService;
 import com.epam.automation.ui.business.pages.LaunchesPage;
-import com.epam.automation.tests.ui.launches_junit5.base.BaseTest;
+import com.epam.automation.tests.ui.launches_junit5.base.JunitUiTestBase;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -15,12 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Launches count data display test suite")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Order(3)
-public class LaunchesCountDataTest extends BaseTest {
+class LaunchesCountDataTest extends JunitUiTestBase {
 
     @ParameterizedTest(name = "Launch #{index} - {0}")
     @MethodSource("com.epam.automation.tests.ui.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchTestDataSets")
     @DisplayName("Verify that each launch contains correct test count data")
-    public void shouldVerifyLaunchesCountData(String datasetName, Launch expectedLaunch, int launchIndex) {
+    void shouldVerifyLaunchesCountData(String datasetName, Launch expectedLaunch, int launchIndex) {
+        assertThat(launchIndex).as("Launch index must be non-negative").isGreaterThanOrEqualTo(0);
+
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

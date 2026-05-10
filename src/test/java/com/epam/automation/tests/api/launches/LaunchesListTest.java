@@ -6,14 +6,14 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.*;
 
-public class LaunchesListTest extends BaseApiTest {
+class LaunchesListTest extends BaseApiTest {
 
     private static final String EXPECTED_LAUNCH_NAME = "Demo Api Tests";
     private static final String ERROR_NOT_FOUND      = "Not Found";
 
     @Test
     @DisplayName("GET /launch – returns the list of launches")
-    public void getLaunchesListTest() {
+    void getLaunchesListTest() {
         api.launches.getList()
                 .statusCode(OK)
                 .body("content", not(empty()))
@@ -22,7 +22,7 @@ public class LaunchesListTest extends BaseApiTest {
 
     @Test
     @DisplayName("GET /launches – returns 404 for a wrong path")
-    public void getLaunchesListFromWrongPathTest() {
+    void getLaunchesListFromWrongPathTest() {
         api.execute(new GetLaunchesListWrongPathRequest())
                 .statusCode(NOT_FOUND)
                 .body("error", equalTo(ERROR_NOT_FOUND));

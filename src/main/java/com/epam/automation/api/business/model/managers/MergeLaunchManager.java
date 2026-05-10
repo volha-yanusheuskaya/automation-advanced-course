@@ -6,6 +6,10 @@ import java.util.List;
 
 public class MergeLaunchManager {
 
+    private MergeLaunchManager() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static MergeLaunch getMergeLaunch(
             String name, String startTime, String endTime,
             int firstLaunchId, int secondLaunchId) {

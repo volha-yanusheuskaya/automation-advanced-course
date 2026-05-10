@@ -3,12 +3,12 @@ package com.epam.automation.tests.ui.launches_testng;
 import com.epam.automation.ui.business.service.LaunchesService;
 import com.epam.automation.ui.business.pages.LaunchesPage;
 import com.epam.automation.tests.ui.launches_testng.data_provider.LaunchTestDataProvider;
-import com.epam.automation.tests.ui.launches_testng.base.BaseTest;
+import com.epam.automation.tests.ui.launches_testng.base.TestNgUiTestBase;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LaunchesSortingTest extends BaseTest {
+public class LaunchesSortingTest extends TestNgUiTestBase {
 
     @Test(
             dataProviderClass = LaunchTestDataProvider.class,

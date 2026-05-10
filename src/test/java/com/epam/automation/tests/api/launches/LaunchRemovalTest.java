@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.*;
 
-public class LaunchRemovalTest extends BaseApiTest {
+class LaunchRemovalTest extends BaseApiTest {
 
     private static final String LAUNCH_NAME = "Demo Api Tests - To remove";
     private static final String LAUNCH_START_TIME = "2026-03-31T16:48:04Z";
@@ -33,7 +33,7 @@ public class LaunchRemovalTest extends BaseApiTest {
 
     @Test
     @DisplayName("DELETE /launch/{id} – deletes the launch")
-    public void deleteLaunchByIdTest() {
+    void deleteLaunchByIdTest() {
         api.launches.delete(launchId)
                 .statusCode(OK);
 

@@ -9,7 +9,7 @@ import static com.epam.automation.ui.core.utils.ElementUtil.*;
 public class ToastComponent extends BasePage {
 
     @FindBy(css = "div.notification-item")
-    private WebElement toastComponent;
+    private WebElement toastItem;
 
     @FindBy(css = "div.notification-item h2")
     private WebElement toastText;
@@ -22,7 +22,7 @@ public class ToastComponent extends BasePage {
     }
 
     public boolean isToastComponentDisplayed() {
-        return isDisplayed(toastComponent);
+        return isDisplayed(toastItem);
     }
 
     public String getToastMessage() {

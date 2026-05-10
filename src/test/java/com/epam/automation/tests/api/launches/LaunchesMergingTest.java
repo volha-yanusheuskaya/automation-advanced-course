@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 
-public class LaunchesMergingTest extends BaseApiTest {
+class LaunchesMergingTest extends BaseApiTest {
 
     private static final String FIRST_LAUNCH_NAME = "Demo Api Tests - Merge 1";
     private static final String FIRST_LAUNCH_START_TIME = "2026-03-31T16:48:04Z";
@@ -53,7 +53,7 @@ public class LaunchesMergingTest extends BaseApiTest {
 
     @Test
     @DisplayName("POST /launch/merge – merges two finished launches")
-    public void launchesMergingTest() {
+    void launchesMergingTest() {
         PostLaunchMergeRequestDto dto = buildMergeDto();
 
         ExtractableResponse<Response> extract = api.launches.merge(dto)
@@ -74,7 +74,7 @@ public class LaunchesMergingTest extends BaseApiTest {
 
     @Test
     @DisplayName("POST /launch/merge – returns 400 when one of the launches does not exist")
-    public void mergeWithInvalidLaunchTest() {
+    void mergeWithInvalidLaunchTest() {
         int invalidLaunchId = Integer.MAX_VALUE;
 
         MergeLaunch launch = MergeLaunchManager.getMergeLaunch(
@@ -90,7 +90,7 @@ public class LaunchesMergingTest extends BaseApiTest {
 
     @Test
     @DisplayName("POST /launch/merge – returns 400 when the launches list is empty")
-    public void mergeWithEmptyLaunchesTest() {
+    void mergeWithEmptyLaunchesTest() {
         MergeLaunch launch = MergeLaunchManager.getMergeLaunch(
                 FIRST_LAUNCH_NAME, FIRST_LAUNCH_START_TIME, SECOND_LAUNCH_END_TIME,
                 first.id(), second.id());

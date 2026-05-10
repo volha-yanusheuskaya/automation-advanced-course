@@ -6,6 +6,10 @@ import java.util.List;
 
 public class AnalyzeLaunchManager {
 
+    private AnalyzeLaunchManager() {
+        throw new UnsupportedOperationException("Utility class");
+    }
+
     public static AnalyzeLaunch getAnalyzeLaunchById(int launchId) {
         return AnalyzeLaunch.builder()
                 .id(launchId)

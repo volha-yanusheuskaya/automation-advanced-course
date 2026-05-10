@@ -31,9 +31,9 @@ import static com.epam.automation.ui.core.utils.ElementUtil.click;
  */
 public class LaunchesPage extends BasePage {
 
-    private static final String baseURL = ConfigurationReader.getBaseUrl();
+    private static final String BASE_URL = ConfigurationReader.getBaseUrl();
     private static final String DEMO_PROJECT = ConfigurationReader.getProperty("demo.project");
-    private static final String LAUNCHES_PAGE_URL = baseURL + "/ui/#" + DEMO_PROJECT + "/launches/all";
+    private static final String LAUNCHES_PAGE_URL = BASE_URL + "/ui/#" + DEMO_PROJECT + "/launches/all";
     private static final String LAUNCH_SELECTION_ELEMENT_PATTERN = "//div[contains(@class,'grid-row-wrapper')][%d]//div[contains(@class,'checkIcon')]";
 
     @FindBy(xpath = "//div[contains(@class,'allLatestDropdown__selected-value')]/div[contains(@class,'active')]")
@@ -163,9 +163,9 @@ public class LaunchesPage extends BasePage {
     public List<String> getAllLaunchesNames() {
         List<String> allLaunchesNames = new ArrayList<>();
         for (int i = 0; i < getLaunchesCount(); i++) {
-            String launchName = getLaunchNames().get(i).getText();
-            String launchNumber = getLaunchNumber().get(i).getText();
-            String nameWithNumber = launchName + " " + launchNumber;
+            String launchNameByIndex = getLaunchNames().get(i).getText();
+            String launchNumberByIndex = getLaunchNumber().get(i).getText();
+            String nameWithNumber = launchNameByIndex + " " + launchNumberByIndex;
             allLaunchesNames.add(nameWithNumber);
         }
         return allLaunchesNames;
@@ -255,8 +255,18 @@ public class LaunchesPage extends BasePage {
             int systemIssueValue = parseIntSafely(systemIssueCount.get(i).getText());
             int toInvestigateValue = parseIntSafely(toInvestigateCount.get(i).getText());
 
-            Launch launch = new Launch(name, date, totalTests, passedTests, failedTests, skippedTests,
-                    productBugValue, autoBugValue, systemIssueValue, toInvestigateValue);
+            Launch launch = Launch.builder()
+                    .name(name)
+                    .date(date)
+                    .totalSteps(totalTests)
+                    .passedSteps(passedTests)
+                    .failedSteps(failedTests)
+                    .skippedSteps(skippedTests)
+                    .productBugCount(productBugValue)
+                    .autoBugCount(autoBugValue)
+                    .systemIssueCount(systemIssueValue)
+                    .toInvestigateCount(toInvestigateValue)
+                    .build();
             launches.add(launch);
         }
         return launches;

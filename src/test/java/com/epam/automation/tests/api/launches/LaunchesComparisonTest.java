@@ -5,7 +5,7 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.*;
 
-public class LaunchesComparisonTest extends BaseApiTest {
+class LaunchesComparisonTest extends BaseApiTest {
 
     private static final String FIRST_LAUNCH_NAME = "Demo Api Tests - Compare 1";
     private static final String FIRST_LAUNCH_START_TIME = "2026-03-31T16:48:04Z";
@@ -40,7 +40,7 @@ public class LaunchesComparisonTest extends BaseApiTest {
 
     @Test
     @DisplayName("GET /launch/compare – returns comparison results for two launches")
-    public void launchesComparisonTest() {
+    void launchesComparisonTest() {
         api.launches.compare(firstLaunchId, secondLaunchId)
                 .statusCode(OK)
                 .body("result", hasSize(2))
@@ -49,7 +49,7 @@ public class LaunchesComparisonTest extends BaseApiTest {
 
     @Test
     @DisplayName("GET /launch/compare – ignores invalid ids")
-    public void launchesComparisonWithInvalidIdTest() {
+    void launchesComparisonWithInvalidIdTest() {
         int invalidLaunchId = Integer.MAX_VALUE;
 
         api.launches.compare(firstLaunchId, invalidLaunchId)
