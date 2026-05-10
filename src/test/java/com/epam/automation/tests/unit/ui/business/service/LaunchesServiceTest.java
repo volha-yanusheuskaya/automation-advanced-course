@@ -29,7 +29,8 @@ class LaunchesServiceTest {
     LaunchesService service;
 
     @Test
-    void totalEqualsSumOfPassedFailedSkipped() {
+    @DisplayName("Should return true when total steps equal sum of passed, failed and skipped")
+    void shouldReturnTrue_WhenTotalEqualsSumOfPassedFailedSkipped() {
         Launch launch = Launch.builder()
                 .name("L #1")
                 .date("2026-01-01")
@@ -42,7 +43,8 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void totalDoesNotEqualSumWhenMismatch() {
+    @DisplayName("Should return false when total steps do not equal sum of passed, failed and skipped")
+    void shouldReturnFalse_WhenTotalDoesNotEqualSumOfPassedFailedSkipped() {
         Launch launch = Launch.builder()
                 .name("L #1")
                 .date("2026-01-01")
@@ -55,20 +57,23 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void returnsFalseWhenLaunchesEmpty() {
+    @DisplayName("Should return false when launches list is empty")
+    void shouldReturnFalse_WhenLaunchesListIsEmpty() {
         when(page.totalLaunchesEmpty()).thenReturn(true);
         assertThat(service.isLaunchesListSortedByMostRecent(new String[][]{{"x", "t"}}, 0)).isFalse();
     }
 
     @Test
-    void returnsFalseWhenListNotDisplayed() {
+    @DisplayName("Should return false when launches list is not displayed")
+    void shouldReturnFalse_WhenLaunchesListIsNotDisplayed() {
         when(page.totalLaunchesEmpty()).thenReturn(false);
         when(page.isLaunchesListDisplayed()).thenReturn(false);
         assertThat(service.isLaunchesListSortedByMostRecent(new String[][]{{"x", "t"}}, 0)).isFalse();
     }
 
     @Test
-    void returnsTrueWhenActualMatchesExpectedTime() {
+    @DisplayName("Should return true when actual start time matches expected")
+    void shouldReturnTrue_WhenActualStartTimeMatchesExpected() {
         when(page.totalLaunchesEmpty()).thenReturn(false);
         when(page.isLaunchesListDisplayed()).thenReturn(true);
         when(page.getAllStartTimes()).thenReturn(List.of("2026-05-10 12:00:00"));
@@ -77,7 +82,8 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void returnsFalseWhenActualDiffersFromExpectedTime() {
+    @DisplayName("Should return false when actual start time differs from expected")
+    void shouldReturnFalse_WhenActualStartTimeDiffersFromExpected() {
         when(page.totalLaunchesEmpty()).thenReturn(false);
         when(page.isLaunchesListDisplayed()).thenReturn(true);
         when(page.getAllStartTimes()).thenReturn(List.of("2026-05-10 12:00:00"));
@@ -86,21 +92,24 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void verifySelectedLaunchesMatchesExpected() {
+    @DisplayName("Should return true when selected launches match expected")
+    void shouldReturnTrue_WhenSelectedLaunchesMatchExpected() {
         when(page.getSelectedLaunches()).thenReturn(List.of("Demo #1", "Demo #2"));
         String[][] expected = {{"Demo #1", "..."}, {"Demo #2", "..."}};
         assertThat(service.verifySelectedLaunches(expected)).isTrue();
     }
 
     @Test
-    void verifySelectedLaunchesFailsOnMismatch() {
+    @DisplayName("Should return false when selected launches do not match expected")
+    void shouldReturnFalse_WhenSelectedLaunchesDoNotMatchExpected() {
         when(page.getSelectedLaunches()).thenReturn(List.of("Demo #1"));
         String[][] expected = {{"Demo #2", "..."}};
         assertThat(service.verifySelectedLaunches(expected)).isFalse();
     }
 
     @Test
-    void clickCompareLaunchesClicksActionsThenCompare() {
+    @DisplayName("Should click actions button then compare button when comparing launches")
+    void shouldClickActionsButtonThenCompareButton_WhenCompareLaunchesInvoked() {
         service.clickCompareLaunches();
         InOrder order = inOrder(page);
         order.verify(page).clickActionsButton();
@@ -108,7 +117,8 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void returnsIgnoresToastComponentDisplayedWhenNameSorted() {
+    @DisplayName("Should return true when launches list is sorted by name")
+    void shouldReturnTrue_WhenLaunchesListSortedByName() {
         when(page.totalLaunchesEmpty()).thenReturn(false);
         when(page.isLaunchesListDisplayed()).thenReturn(true);
         when(page.getAllLaunchesNames()).thenReturn(List.of("Demo #1"));
@@ -117,20 +127,23 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void isLaunchesListSortedByNameReturnsFalseWhenEmpty() {
+    @DisplayName("Should return false when launches list is empty during name sort check")
+    void shouldReturnFalse_WhenLaunchesListIsEmptyForNameSorting() {
         when(page.totalLaunchesEmpty()).thenReturn(true);
         assertThat(service.isLaunchesListSortedByName(new String[][]{{"x", "t"}}, 0)).isFalse();
     }
 
     @Test
-    void isLaunchesListSortedByNameReturnsFalseWhenNotDisplayed() {
+    @DisplayName("Should return false when launches list is not displayed during name sort check")
+    void shouldReturnFalse_WhenLaunchesListIsNotDisplayedForNameSorting() {
         when(page.totalLaunchesEmpty()).thenReturn(false);
         when(page.isLaunchesListDisplayed()).thenReturn(false);
         assertThat(service.isLaunchesListSortedByName(new String[][]{{"x", "t"}}, 0)).isFalse();
     }
 
     @Test
-    void sortLaunchesByNameWaitsForChange() {
+    @DisplayName("Should wait for element text change when sorting launches by name")
+    void shouldWaitForElementTextChange_WhenSortingLaunchesByName() {
         WebElement mockElement = mock(WebElement.class);
         when(mockElement.getText()).thenReturn("Old Name");
         when(page.getTotalLaunches()).thenReturn(List.of(mockElement));
@@ -144,7 +157,8 @@ class LaunchesServiceTest {
     }
 
     @Test
-    void removeSelectedLaunchClicksActionsAndDelete() {
+    @DisplayName("Should click actions button then delete button when removing selected launch")
+    void shouldClickActionsButtonThenDeleteButton_WhenRemovingSelectedLaunch() {
         service.removeSelectedLaunch();
         InOrder order = inOrder(page);
         order.verify(page).clickActionsButton();

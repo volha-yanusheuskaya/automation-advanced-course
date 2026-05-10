@@ -138,14 +138,13 @@ class JsonDataReaderTest {
     }
 
     @Test
-    @DisplayName("Should throw RuntimeException and maintain message when file read fails")
-    void readDataByKey_FileAccessDenied_ThrowsRuntimeExceptionWithCausedBy() {
+    @DisplayName("Should throw ConfigurationException with IOException cause when file path is not accessible")
+    void readDataByKey_FileNotAccessible_ThrowsConfigurationExceptionWithIOCause() {
         String filePath = TEST_DATA_DIR + "/nonexistent_dir/launches.json";
-        String arrayKey = "launches1";
 
-        assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Failed to read JSON file")
+        assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, "launches1"))
+                .isInstanceOf(ConfigurationException.class)
+                .hasMessageContaining("Failed to read JSON file: " + filePath)
                 .hasCauseInstanceOf(IOException.class);
     }
 
@@ -180,18 +179,6 @@ class JsonDataReaderTest {
         assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to read JSON file")
-                .hasCauseInstanceOf(IOException.class);
-    }
-
-    @Test
-    @DisplayName("Should throw ConfigurationException when IOException occurs during file read")
-    void readDataByKey_FileAccessDenied_ThrowsConfigurationExceptionWithIOCause() {
-        String filePath = TEST_DATA_DIR + "/nonexistent_dir/launches.json";
-        String arrayKey = "launches1";
-
-        assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Failed to read JSON file: " + filePath)
                 .hasCauseInstanceOf(IOException.class);
     }
 

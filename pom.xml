@@ -18,6 +18,7 @@
         <reportportal.version>5.6.7</reportportal.version>
         <browserstack.sdk.version>1.57.0</browserstack.sdk.version>
         <surefire.version>3.2.2</surefire.version>
+        <lombok.version>1.18.44</lombok.version>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
         <sonar.projectKey>automation-advanced-course</sonar.projectKey>
         <sonar.projectName>Automation Advanced Course</sonar.projectName>
@@ -193,7 +194,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -287,7 +288,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.42</version>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
