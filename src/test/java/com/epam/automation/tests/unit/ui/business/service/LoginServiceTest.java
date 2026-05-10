@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,20 +19,22 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("LoginService Unit Tests")
 class LoginServiceTest {
+
     @Mock
     private LoginPage loginPage;
+
+    @InjectMocks
+    private LoginService service;
 
     @Test
     @DisplayName("Should construct LoginService with LoginPage instance")
     void constructorInitializesLoginService() {
-        LoginService service = new LoginService(loginPage);
         assertThat(service).isNotNull();
     }
 
     @Test
     @DisplayName("Should perform login sequence with correct credentials")
     void loginAsEntersCredentialsClicksButtonAndWaits() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("testuser", "testpass123");
         service.loginAs(user);
         InOrder order = inOrder(loginPage);
@@ -43,7 +46,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should return DashboardPage instance after successful login")
     void loginAsReturnsDashboardPage() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("admin", "password");
         DashboardPage result = service.loginAs(user);
         assertThat(result)
@@ -54,7 +56,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should verify all login steps are called in correct order")
     void loginAsVerifiesCallSequence() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("user1", "pass1");
         service.loginAs(user);
         verify(loginPage).enterCredentials("user1", "pass1");
@@ -65,7 +66,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should pass exact username from user object to enterCredentials")
     void loginAsPassesCorrectUsername() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("john_doe", "securepass");
         service.loginAs(user);
         verify(loginPage).enterCredentials("john_doe", "securepass");
@@ -74,7 +74,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should pass exact password from user object to enterCredentials")
     void loginAsPassesCorrectPassword() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("user", "specialPass@123");
         service.loginAs(user);
         verify(loginPage).enterCredentials("user", "specialPass@123");
@@ -83,7 +82,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should handle login with special characters in credentials")
     void loginAsWithSpecialCharactersInCredentials() {
-        LoginService service = new LoginService(loginPage);
         User user = new User("user@example.com", "p@ss#w0rd!");
         DashboardPage result = service.loginAs(user);
         assertThat(result).isNotNull();
@@ -93,7 +91,6 @@ class LoginServiceTest {
     @Test
     @DisplayName("Should always create new DashboardPage on successful login")
     void loginAsAlwaysReturnsNewDashboardPage() {
-        LoginService service = new LoginService(loginPage);
         User user1 = new User("user1", "pass1");
         User user2 = new User("user2", "pass2");
         DashboardPage result1 = service.loginAs(user1);

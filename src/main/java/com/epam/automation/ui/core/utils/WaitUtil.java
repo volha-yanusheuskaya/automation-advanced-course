@@ -13,6 +13,7 @@ import static com.epam.automation.common.core.config.ConfigurationReader.getDefa
 public class WaitUtil {
 
     private WaitUtil() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static WebDriverWait getWait() {

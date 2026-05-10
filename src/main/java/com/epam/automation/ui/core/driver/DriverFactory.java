@@ -28,6 +28,7 @@ public class DriverFactory {
     private static final String BROWSERSTACK_HUB_URL = "https://hub-cloud.browserstack.com/wd/hub";
 
     private DriverFactory() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static WebDriver createDriver() {

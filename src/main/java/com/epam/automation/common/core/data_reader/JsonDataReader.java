@@ -6,6 +6,7 @@ import com.epam.automation.common.core.logger.ILogger;
 import com.epam.automation.common.core.logger.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,10 +28,14 @@ public class JsonDataReader implements IDataReader<Launch> {
             }
 
             Launch[] launches = gson.fromJson(json.get(arrayKey), Launch[].class);
+            if (launches == null) {
+                throw new ConfigurationException("Array key '" + arrayKey + "' is null in JSON: " + filePath);
+            }
             logger.info("Parsed {} launches from '{}' array", launches.length, arrayKey);
             return Arrays.asList(launches);
-        } catch (ConfigurationException e) {
-            throw e;
+        } catch (JsonSyntaxException e) {
+            logger.error("Failed to parse JSON file: {}", e.getMessage());
+            throw new ConfigurationException("Failed to parse JSON file: " + filePath, e);
         } catch (IOException e) {
             logger.error("Failed to read JSON file: {}", e.getMessage());
             throw new ConfigurationException("Failed to read JSON file: " + filePath, e);

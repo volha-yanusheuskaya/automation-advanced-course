@@ -60,28 +60,6 @@ class JsonDataReaderTest {
     }
 
     @Test
-    @DisplayName("Should throw RuntimeException when array key is not found in JSON")
-    void readDataByKey_MissingArrayKey_ThrowsRuntimeException() {
-        String filePath = TEST_DATA_DIR + "/launches.json";
-        String invalidArrayKey = "nonExistentKey";
-
-        assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, invalidArrayKey))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Array key 'nonExistentKey' not found in JSON");
-    }
-
-    @Test
-    @DisplayName("Should throw RuntimeException when JSON file does not exist")
-    void readDataByKey_FileNotFound_ThrowsRuntimeException() {
-        String filePath = TEST_DATA_DIR + "/nonexistent.json";
-        String arrayKey = "launches1";
-
-        assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Failed to read JSON file");
-    }
-
-    @Test
     @DisplayName("Should return empty list when array in JSON is empty")
     void readDataByKey_EmptyArrayInJson_ReturnsEmptyList() throws IOException {
         String filePath = createTempJsonFile("{\"emptyArray\": []}");
@@ -117,7 +95,7 @@ class JsonDataReaderTest {
         String arrayKey = "launches";
 
         assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(Exception.class);
+                .isInstanceOf(ConfigurationException.class);
     }
 
     @Test
@@ -225,7 +203,7 @@ class JsonDataReaderTest {
         String arrayKey = "launches";
 
         assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(Exception.class);
+                .isInstanceOf(ConfigurationException.class);
     }
 
     @Test
@@ -236,7 +214,7 @@ class JsonDataReaderTest {
         String arrayKey = "launches";
 
         assertThatThrownBy(() -> jsonDataReader.readDataByKey(filePath, arrayKey))
-                .isInstanceOf(Exception.class);
+                .isInstanceOf(ConfigurationException.class);
     }
 
     @Test

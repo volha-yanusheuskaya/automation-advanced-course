@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   sonarqube:
-    image: sonarqube:2026.2-developer
+    image: sonarqube:lts-community
     depends_on: [db]
     ports: ["9000:9000"]
     environment:

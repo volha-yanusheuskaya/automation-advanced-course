@@ -10,7 +10,7 @@ import org.testng.annotations.*;
 
 @Listeners({TestListener.class, ReportPortalListener.class})
 @Test(groups = "ui_testng")
-public class TestNgUiTestBase extends BaseTestCore {
+public abstract class TestNgUiTestBase extends BaseTestCore {
     private static final ILogger logger = LoggerFactory.getLogger(TestNgUiTestBase.class);
 
     @BeforeMethod

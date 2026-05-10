@@ -21,6 +21,7 @@ public class ScreenshotUtil {
     private static final ILogger logger = LoggerFactory.getLogger(ScreenshotUtil.class);
 
     private ScreenshotUtil() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static Optional<String> takeScreenshot(String result) {

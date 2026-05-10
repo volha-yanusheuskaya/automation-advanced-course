@@ -5,6 +5,7 @@ import java.io.File;
 public class LoggerFactory {
 
     private LoggerFactory() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     static {

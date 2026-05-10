@@ -21,6 +21,8 @@ class LaunchesCountDataTest extends JunitUiTestBase {
     @MethodSource("com.epam.automation.tests.ui.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchTestDataSets")
     @DisplayName("Verify that each launch contains correct test count data")
     void shouldVerifyLaunchesCountData(String datasetName, Launch expectedLaunch, int launchIndex) {
+        assertThat(launchIndex).as("Launch index must be non-negative").isGreaterThanOrEqualTo(0);
+
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

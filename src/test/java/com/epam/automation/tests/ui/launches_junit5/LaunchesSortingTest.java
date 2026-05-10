@@ -18,6 +18,9 @@ class LaunchesSortingTest extends JunitUiTestBase {
     @MethodSource("com.epam.automation.tests.ui.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchesDataSetsByDefault")
     @DisplayName("Verify launches sorted by most recent")
     void shouldVerifyLaunchesSortedByMostRecentWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
+        assertThat(expectedLaunches).as("Expected launches data must not be empty").isNotEmpty();
+        assertThat(launchIndex).as("Launch index must be non-negative").isGreaterThanOrEqualTo(0);
+
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();
@@ -35,6 +38,9 @@ class LaunchesSortingTest extends JunitUiTestBase {
     @MethodSource("com.epam.automation.tests.ui.launches_junit5.data_provider.LaunchTestDataProvider#provideLaunchesDataSetsByName")
     @DisplayName("Verify launches sorted by name")
     void shouldVerifyLaunchesSortedByNameWithDataSets(String datasetName, String[][] expectedLaunches, int launchIndex) {
+        assertThat(expectedLaunches).as("Expected launches data must not be empty").isNotEmpty();
+        assertThat(launchIndex).as("Launch index must be non-negative").isGreaterThanOrEqualTo(0);
+
         loginWithDefaultCredentials().closeToastComponent();
 
         LaunchesPage launchesPage = new LaunchesPage();

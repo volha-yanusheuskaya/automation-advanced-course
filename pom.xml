@@ -30,7 +30,6 @@
             **/business/pages/**,
             **/business/models/**,
             **/business/components/**,
-            **/business/service/**,
             **/api/business/controller/**,
             **/api/business/model/**,
             **/api/business/request/**,
@@ -194,7 +193,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
+            <version>1.18.44</version>
             <scope>provided</scope>
         </dependency>
 
@@ -271,7 +270,7 @@
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
@@ -464,14 +463,21 @@
             </dependencies>
             <build>
                 <plugins>
+                    <!-- BrowserStack tests run remotely; JaCoCo instrumentation is not applicable -->
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.12</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${surefire.version}</version>
                         <configuration>
-                            <argLine>
-                                @{argLine} -javaagent:"${settings.localRepository}/com/browserstack/browserstack-java-sdk/${browserstack.sdk.version}/browserstack-java-sdk-${browserstack.sdk.version}.jar"
-                            </argLine>
+                            <argLine>-javaagent:"${settings.localRepository}/com/browserstack/browserstack-java-sdk/${browserstack.sdk.version}/browserstack-java-sdk-${browserstack.sdk.version}.jar"</argLine>
                             <systemPropertyVariables>
                                 <execution.mode>browserstack</execution.mode>
                             </systemPropertyVariables>

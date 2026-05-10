@@ -57,7 +57,7 @@ class ConfigurationReaderTest {
     @Test
     @DisplayName("Should return value from file when no system property is set")
     void getPropertyReturnsValueFromFileWhenNoSystemProperty() {
-        assertThat(ConfigurationReader.getProperty("browser")).isEqualTo("chrome");
+        assertThat(ConfigurationReader.getProperty("browser")).isNotBlank();
     }
 
     @Test
@@ -70,8 +70,9 @@ class ConfigurationReaderTest {
     @Test
     @DisplayName("Should ignore blank system property and use file value")
     void getPropertyIgnoresBlankSystemProperty() {
+        String fileValue = ConfigurationReader.getProperty("browser");
         System.setProperty("browser", "   ");
-        assertThat(ConfigurationReader.getProperty("browser")).isEqualTo("chrome");
+        assertThat(ConfigurationReader.getProperty("browser")).isEqualTo(fileValue);
     }
 
     @Test

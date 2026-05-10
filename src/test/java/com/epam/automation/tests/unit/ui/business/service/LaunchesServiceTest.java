@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -22,8 +23,10 @@ import static org.mockito.Mockito.*;
 @DisplayName("LaunchesService Unit Tests")
 class LaunchesServiceTest {
 
-    @Mock LaunchesPage page;
-    @InjectMocks LaunchesService service;
+    @Mock
+    LaunchesPage page;
+    @InjectMocks
+    LaunchesService service;
 
     @Test
     void totalEqualsSumOfPassedFailedSkipped() {
@@ -128,7 +131,7 @@ class LaunchesServiceTest {
 
     @Test
     void sortLaunchesByNameWaitsForChange() {
-        org.openqa.selenium.WebElement mockElement = mock(org.openqa.selenium.WebElement.class);
+        WebElement mockElement = mock(WebElement.class);
         when(mockElement.getText()).thenReturn("Old Name");
         when(page.getTotalLaunches()).thenReturn(List.of(mockElement));
 

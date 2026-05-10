@@ -10,6 +10,7 @@ public class ElementUtil {
     private static final ILogger logger = LoggerFactory.getLogger(ElementUtil.class);
 
     private ElementUtil() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static void sendText(WebElement element, String text) {

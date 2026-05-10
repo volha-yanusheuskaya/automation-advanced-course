@@ -9,6 +9,7 @@ public class DriverManager {
     private static final ILogger logger = LoggerFactory.getLogger(DriverManager.class);
 
     private DriverManager() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     public static WebDriver getDriver() {

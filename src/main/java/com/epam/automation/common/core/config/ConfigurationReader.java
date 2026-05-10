@@ -12,6 +12,7 @@ public class ConfigurationReader {
     private static final Properties properties;
 
     private ConfigurationReader() {
+        throw new UnsupportedOperationException("Utility class");
     }
 
     static {
@@ -27,8 +28,6 @@ public class ConfigurationReader {
             properties = new Properties();
             properties.load(input);
             logger.info("Configuration loaded successfully...");
-        } catch (ConfigurationException e) {
-            throw e;
         } catch (IOException e) {
             logger.error("Failed to load config.properties: {}", e.getMessage(), e);
             throw new ConfigurationException("Failed to load config.properties");
