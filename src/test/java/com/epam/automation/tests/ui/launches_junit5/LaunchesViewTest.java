@@ -1,7 +1,7 @@
 package com.epam.automation.tests.ui.launches_junit5;
 
 import com.epam.automation.ui.business.pages.LaunchesPage;
-import com.epam.automation.tests.ui.launches_junit5.base.BaseTest;
+import com.epam.automation.tests.ui.launches_junit5.base.JunitUiTestBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Launches view display test suite")
 @Order(6)
-public class LaunchesViewTest extends BaseTest {
+class LaunchesViewTest extends JunitUiTestBase {
 
     @Test
     @DisplayName("Verify that the launch view can be opened by click launch name")
-    public void shouldOpenLaunchViewWhenClickingLaunchName() {
+    void shouldOpenLaunchViewWhenClickingLaunchName() {
         LaunchesPage launchesPage = new LaunchesPage();
 
         loginWithDefaultCredentials().closeToastComponent();
@@ -29,7 +29,7 @@ public class LaunchesViewTest extends BaseTest {
 
     @Test
     @DisplayName("Verify that the launch view can be opened by click total steps")
-    public void shouldOpenLaunchViewWhenClickingTotalSteps() {
+    void shouldOpenLaunchViewWhenClickingTotalSteps() {
         LaunchesPage launchesPage = new LaunchesPage();
 
         loginWithDefaultCredentials().closeToastComponent();
@@ -44,7 +44,7 @@ public class LaunchesViewTest extends BaseTest {
 
     @Test
     @DisplayName("Verify that the launch view can be opened by click passed steps")
-    public void shouldOpenLaunchViewWhenClickingPassedSteps() {
+    void shouldOpenLaunchViewWhenClickingPassedSteps() {
         LaunchesPage launchesPage = new LaunchesPage();
 
         loginWithDefaultCredentials().closeToastComponent();

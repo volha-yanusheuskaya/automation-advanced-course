@@ -15,16 +15,16 @@ import static com.epam.automation.ui.core.utils.ScreenshotUtil.takeScreenshot;
 
 @ExtendWith({TestResultExtension.class})
 @Tag("ui_junit")
-public class BaseTest extends BaseTestCore {
-    private static final ILogger logger = LoggerFactory.getLogger(BaseTest.class);
+public abstract class JunitUiTestBase extends BaseTestCore {
+    private static final ILogger logger = LoggerFactory.getLogger(JunitUiTestBase.class);
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         performSetUp();
     }
 
     @AfterEach
-    public void tearDown(TestInfo testInfo) {
+    void tearDown(TestInfo testInfo) {
         try {
             String testName = testInfo.getTestMethod()
                     .map(Method::getName)

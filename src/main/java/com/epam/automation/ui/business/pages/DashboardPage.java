@@ -12,7 +12,7 @@ public class DashboardPage extends BasePage {
 
     public static final String DASHBOARD_PAGE_TITLE = "Report Portal";
 
-    private static final String baseURL = ConfigurationReader.getBaseUrl();
+    private static final String BASE_URL = ConfigurationReader.getBaseUrl();
     private static final String DEFAULT_PROJECT = ConfigurationReader.getProperty("dashboard.project");
     private static final String DEMO_PROJECT = ConfigurationReader.getProperty("demo.project");
 
@@ -51,7 +51,7 @@ public class DashboardPage extends BasePage {
     }
 
     private static String configureDashboardUrl(String projectName) {
-        return baseURL + "/ui/#" + projectName + "/dashboard";
+        return BASE_URL + "/ui/#" + projectName + "/dashboard";
     }
 
     public void closeToastComponent() {

@@ -6,6 +6,9 @@ import java.util.List;
 
 public class AnalyzeLaunchManager {
 
+    private AnalyzeLaunchManager() {
+    }
+
     public static AnalyzeLaunch getAnalyzeLaunchById(int launchId) {
         return AnalyzeLaunch.builder()
                 .id(launchId)

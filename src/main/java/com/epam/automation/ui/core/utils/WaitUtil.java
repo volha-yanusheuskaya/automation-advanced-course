@@ -12,6 +12,9 @@ import static com.epam.automation.common.core.config.ConfigurationReader.getDefa
 
 public class WaitUtil {
 
+    private WaitUtil() {
+    }
+
     public static WebDriverWait getWait() {
         return new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(getDefaultTimeout()));
     }

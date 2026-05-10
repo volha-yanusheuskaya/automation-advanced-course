@@ -4,6 +4,9 @@ import java.io.File;
 
 public class LoggerFactory {
 
+    private LoggerFactory() {
+    }
+
     static {
         File logsDir = new File("logs");
         if (!logsDir.exists()) {

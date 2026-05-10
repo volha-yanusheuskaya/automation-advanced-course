@@ -6,6 +6,9 @@ import java.util.List;
 
 public class MergeLaunchManager {
 
+    private MergeLaunchManager() {
+    }
+
     public static MergeLaunch getMergeLaunch(
             String name, String startTime, String endTime,
             int firstLaunchId, int secondLaunchId) {

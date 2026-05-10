@@ -9,8 +9,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium.version>4.41.0</selenium.version>
         <testng.version>7.12.0</testng.version>
@@ -19,6 +18,30 @@
         <reportportal.version>5.6.7</reportportal.version>
         <browserstack.sdk.version>1.57.0</browserstack.sdk.version>
         <surefire.version>3.2.2</surefire.version>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.projectKey>automation-advanced-course</sonar.projectKey>
+        <sonar.projectName>Automation Advanced Course</sonar.projectName>
+        <sonar.coverage.jacoco.xmlReportPaths>
+            ${project.reporting.outputDirectory}/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>
+            **/DriverFactory.java,
+            **/driver/**,
+            **/business/pages/**,
+            **/business/models/**,
+            **/business/components/**,
+            **/business/service/**,
+            **/api/business/controller/**,
+            **/api/business/model/**,
+            **/api/business/request/**,
+            **/core/base/**,
+            **/core/utils/WaitUtil.java,
+            **/core/utils/ElementUtil.java,
+            **/core/utils/ScreenshotUtil.java,
+            **/core/logger/**,
+            **/CucumberRunner.java,
+            **/*Listener.java
+        </sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -171,8 +194,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.44</version>
-            <scope>compile</scope>
+            <version>1.18.42</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -180,6 +203,27 @@
             <artifactId>modelmapper</artifactId>
             <version>3.2.6</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>5.2.0</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -204,11 +248,55 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire.version}</version>
                 <configuration>
+                    <argLine>@{argLine}</argLine>
+                    <includes>
+                        <include>**/tests/unit/**/*Test.java</include>
+                    </includes>
                     <excludes>
                         <exclude>**/launches_bdd/**</exclude>
                     </excludes>
                     <failIfNoTests>false</failIfNoTests>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.42</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>5.0.0.4389</version>
             </plugin>
         </plugins>
     </build>
@@ -341,6 +429,20 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>${surefire.version}</version>
                         <configuration>
+                            <argLine>@{argLine}</argLine>
+                            <includes>
+                                <include>**/tests/ui/launches_junit5/**/*Test.java</include>
+                            </includes>
+                            <excludes>
+                                <exclude>**/launches_bdd/**</exclude>
+                                <exclude>**/launches_testng/**</exclude>
+                            </excludes>
+                            <groups>ui_junit</groups>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.testng:testng</classpathDependencyExclude>
+                                <classpathDependencyExclude>com.epam.reportportal:agent-java-testng</classpathDependencyExclude>
+                            </classpathDependencyExcludes>
+                            <failIfNoTests>true</failIfNoTests>
                             <systemPropertyVariables>
                                 <execution.mode>${execution.mode}</execution.mode>
                                 <selenoid.url>${selenoid.url}</selenoid.url>
@@ -368,7 +470,7 @@
                         <version>${surefire.version}</version>
                         <configuration>
                             <argLine>
-                                -javaagent:"${settings.localRepository}/com/browserstack/browserstack-java-sdk/${browserstack.sdk.version}/browserstack-java-sdk-${browserstack.sdk.version}.jar"
+                                @{argLine} -javaagent:"${settings.localRepository}/com/browserstack/browserstack-java-sdk/${browserstack.sdk.version}/browserstack-java-sdk-${browserstack.sdk.version}.jar"
                             </argLine>
                             <systemPropertyVariables>
                                 <execution.mode>browserstack</execution.mode>

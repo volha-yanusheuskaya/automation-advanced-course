@@ -11,6 +11,9 @@ public class ConfigurationReader {
     private static final Logger logger = LogManager.getLogger(ConfigurationReader.class);
     private static final Properties properties;
 
+    private ConfigurationReader() {
+    }
+
     static {
         try (InputStream input = ConfigurationReader.class
                 .getClassLoader()
@@ -18,15 +21,17 @@ public class ConfigurationReader {
 
             if (input == null) {
                 logger.error("Can't find config.properties file");
-                throw new RuntimeException("config.properties file not found in classpath");
+                throw new ConfigurationException("config.properties file not found in classpath");
             }
 
             properties = new Properties();
             properties.load(input);
             logger.info("Configuration loaded successfully...");
+        } catch (ConfigurationException e) {
+            throw e;
         } catch (IOException e) {
             logger.error("Failed to load config.properties: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to load config.properties");
+            throw new ConfigurationException("Failed to load config.properties");
         }
     }
 

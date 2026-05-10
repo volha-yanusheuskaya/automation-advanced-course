@@ -9,7 +9,7 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class LaunchAnalysisTest extends BaseApiTest {
+class LaunchAnalysisTest extends BaseApiTest {
 
     private static final String LAUNCH_NAME = "Demo Api Tests - Analyze";
     private static final String LAUNCH_START_TIME = "2026-03-31T16:48:04Z";
@@ -36,7 +36,7 @@ public class LaunchAnalysisTest extends BaseApiTest {
 
     @Test
     @DisplayName("POST /launch/analyze – starts analysis for a launch")
-    public void launchAnalysisTest() {
+    void launchAnalysisTest() {
         AnalyzeLaunch launch = AnalyzeLaunchManager.getAnalyzeLaunchById(launchId);
         PostLaunchAnalyzeRequestDto dto = AnalyzeLaunchesMapper.map(launch);
 
@@ -48,7 +48,7 @@ public class LaunchAnalysisTest extends BaseApiTest {
 
     @Test
     @DisplayName("POST /launch/analyze – returns 404 for an invalid launch id")
-    public void launchAnalysisWithInvalidIdTest() {
+    void launchAnalysisWithInvalidIdTest() {
         int invalidLaunchId = Integer.MAX_VALUE;
 
         AnalyzeLaunch launch = AnalyzeLaunchManager.getAnalyzeLaunchById(invalidLaunchId);

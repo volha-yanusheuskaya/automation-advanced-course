@@ -27,6 +27,9 @@ public class DriverFactory {
     private static final ILogger logger = LoggerFactory.getLogger(DriverFactory.class);
     private static final String BROWSERSTACK_HUB_URL = "https://hub-cloud.browserstack.com/wd/hub";
 
+    private DriverFactory() {
+    }
+
     public static WebDriver createDriver() {
         String browser = ConfigurationReader.getProperty("browser");
         BrowserType browserType = BrowserType.valueOf(browser.toUpperCase());

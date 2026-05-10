@@ -3,14 +3,14 @@ package com.epam.automation.tests.ui.launches_testng;
 import com.epam.automation.ui.business.models.Launch;
 import com.epam.automation.ui.business.service.LaunchesService;
 import com.epam.automation.ui.business.pages.LaunchesPage;
-import com.epam.automation.tests.ui.launches_testng.base.BaseTest;
+import com.epam.automation.tests.ui.launches_testng.base.TestNgUiTestBase;
 import com.epam.automation.tests.ui.launches_testng.data_provider.LaunchTestDataProvider;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class LaunchesCountDataTest extends BaseTest {
+public class LaunchesCountDataTest extends TestNgUiTestBase {
 
     @Test(
             dataProviderClass = LaunchTestDataProvider.class,

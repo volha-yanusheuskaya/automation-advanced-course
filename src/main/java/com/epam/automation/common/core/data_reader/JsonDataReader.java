@@ -1,5 +1,6 @@
 package com.epam.automation.common.core.data_reader;
 
+import com.epam.automation.common.core.config.ConfigurationException;
 import com.epam.automation.ui.business.models.Launch;
 import com.epam.automation.common.core.logger.ILogger;
 import com.epam.automation.common.core.logger.LoggerFactory;
@@ -22,15 +23,17 @@ public class JsonDataReader implements IDataReader<Launch> {
             JsonObject json = gson.fromJson(content, JsonObject.class);
 
             if (!json.has(arrayKey)) {
-                throw new RuntimeException("Array key '" + arrayKey + "' not found in JSON");
+                throw new ConfigurationException("Array key '" + arrayKey + "' not found in JSON");
             }
 
             Launch[] launches = gson.fromJson(json.get(arrayKey), Launch[].class);
             logger.info("Parsed {} launches from '{}' array", launches.length, arrayKey);
             return Arrays.asList(launches);
+        } catch (ConfigurationException e) {
+            throw e;
         } catch (IOException e) {
             logger.error("Failed to read JSON file: {}", e.getMessage());
-            throw new RuntimeException("Failed to read JSON file: " + filePath, e);
+            throw new ConfigurationException("Failed to read JSON file: " + filePath, e);
         }
     }
 }

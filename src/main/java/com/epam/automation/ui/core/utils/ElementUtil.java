@@ -9,6 +9,9 @@ import static com.epam.automation.ui.core.utils.WaitUtil.*;
 public class ElementUtil {
     private static final ILogger logger = LoggerFactory.getLogger(ElementUtil.class);
 
+    private ElementUtil() {
+    }
+
     public static void sendText(WebElement element, String text) {
         waitForElementVisible(element);
         element.clear();
